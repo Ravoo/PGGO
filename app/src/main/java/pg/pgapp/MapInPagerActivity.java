@@ -25,6 +25,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -53,15 +54,6 @@ public class MapInPagerActivity extends AppCompatActivity {
         mPager.requestTransparentRegion(mPager);
     }
 
-    /** A simple fragment that displays a TextView. */
-    public static class TextFragment extends Fragment {
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
-            return inflater.inflate(R.layout.text_fragment, container, false);
-        }
-    }
-
     /** A simple FragmentPagerAdapter that returns two TextFragment and a SupportMapFragment. */
     public static class MyAdapter extends FragmentPagerAdapter {
 
@@ -78,7 +70,7 @@ public class MapInPagerActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             switch (position) {
                 case 0:
-                    return new TextFragment();
+                    return new OptionsFragment();
                 case 1:
                     return new ETIMapFragment();
                 case 2:

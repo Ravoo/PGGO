@@ -2,5 +2,41 @@
     <string name="app_name">PGApp</string>
     <string name="title_activity_maps">Map</string>
     <string name="map_in_pager_label">Map In Pager</string>
-    <string name="swipe">\u2190 Swipe \u2192</string>
+
+    <string name="settings_title">Ustawienia aplikacji</string>
+
+    <string name="general_settings">Ustawienia ogólne</string>
+    <string name="zoom_buttons">Przyciski powiększania</string>
+    <string name="zoom_buttons_summary">Wyświetlaj przyciski umożliwiające powiększanie i zmniejszanie</string>
+    <string name="compass">Kompas</string>
+    <string name="compass_summary">Wyświetlaj ikonę kompasu</string>
+    <string name="my_location_button">Przycisk lokalizacji</string>
+    <string name="my_location_button_summary">Wyświetlaj przycisk lokalizacji</string>
+    <string name="my_location_layer">Warstwa lokalizacji</string>
+    <string name="my_location_layer_summary">Wyświetlaj informacje o lokalizacji</string>
+
+    <string name="all_gestures">Gesty</string>
+    <string name="all_gestures_summary">Umożliwia wykorzystywanie gestów do kontrolowania mapy</string>
+    <string name="scroll_gestures">Gesty przewijania</string>
+    <string name="scroll_gestures_summary">Umożliwia przewijanie mapy gestami</string>
+    <string name="zoom_gestures">Gesty powiększania</string>
+    <string name="zoom_gestures_summary">Umożliwia powiększanie i zmniejszanie mapy gestami</string>
+    <string name="tilt_gestures">Gesty pochylania</string>
+    <string name="tilt_gestures_summary">Umożliwia pochylanie mapy gestami</string>
+    <string name="rotate_gestures">Gesty obracania</string>
+    <string name="rotate_gestures_summary">Umożliwia obracanie mapy gestami</string>
+
+    <string name="user_style_settings">Personalizacja</string>
+    <string name="night_mode">Tryb nocny</string>
+    <string name="night_mode_summary">Ustawia ciemny motyw przewodni aplikacji i mapy</string>
+    <string name="text_size">Wielkość tekstu</string>
+    <string name="text_size_summary">Możliwość określenia wielkości czcionki</string>
+
+    <string name="regional_settings">Ustawienia regionalne</string>
+    <string name="language_pl">Język polski</string>
+    <string name="language_eng">Język angielski</string>
+
+    <string name="more_information">Dodatkowe informacje</string>
+    <string name="link_title">Dowiedz się więcej</string>
+    <string name="link_summary">Strona główna Politechniki Gdańskiej</string>
 </resources>
