@@ -47,7 +47,7 @@ public class Initializer {
         GroundOverlay mechanicnzyGroundOverlay = mMap.addGroundOverlay(mechanicznyGroundOverlayOptions);
         mechanicnzyGroundOverlay.setClickable(true);
         mechanicnzyGroundOverlay.setTag(Building.MECHANICZNY);
-        
+
 
         mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
 
