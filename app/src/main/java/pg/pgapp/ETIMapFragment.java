@@ -54,11 +54,7 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-
-        // Add a marker in Sydney and move the camera
-        LatLng ETI = new LatLng(54.371690, 18.612353);
-        mMap.addMarker(new MarkerOptions().position(ETI).title("ETI Marker"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ETI));
-        mMap.animateCamera(CameraUpdateFactory.zoomTo(17));
+        Initializer initializer = new Initializer();
+        initializer.Initialize(mMap,getContext());
     }
 }
