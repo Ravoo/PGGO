@@ -47,20 +47,9 @@ public class Initializer {
         GroundOverlay mechanicnzyGroundOverlay = mMap.addGroundOverlay(mechanicznyGroundOverlayOptions);
         mechanicnzyGroundOverlay.setClickable(true);
         mechanicnzyGroundOverlay.setTag(Building.MECHANICZNY);
+        
 
-
-
-        mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(){
-            @Override
-            public void onGroundOverlayClick(GroundOverlay groundOverlay) {
-                Log.i("BUDYNEK:",groundOverlay.getTag().toString());
-                Intent intent = new Intent(context, BuildingDetailsActivity.class);
-                context.startActivity(intent);
-            }
-
-        });
-
-        //mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener());
+        mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(ETI)); //TODO: domyślnie będzie move to my location
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
