@@ -1,29 +1,27 @@
 package pg.pgapp;
 
+import android.content.SharedPreferences;
+import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentActivity;
-import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.MapStyleOptions;
 
 public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
 
-    public static MapFragment newInstance() {
+    public static SupportMapFragment newInstance() {
 
         Bundle args = new Bundle();
-        MapFragment fragment = new MapFragment();
+        SupportMapFragment fragment = new SupportMapFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -55,6 +53,10 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Initializer initializer = new Initializer();
-        initializer.Initialize(mMap,getContext());
+        initializer.Initialize(mMap, getContext());
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+        if(preferences.getBoolean("night_mode_preference", true)){
+            mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_night));
+        }
     }
 }
