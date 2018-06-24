@@ -22,10 +22,8 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.Window;
 
 import com.google.android.gms.maps.SupportMapFragment;
 
@@ -39,13 +37,15 @@ public class MapInPagerActivity extends AppCompatActivity {
 
     private ViewPager mPager;
 
-    /** Called when the activity is first created. */
+    /**
+     * Called when the activity is first created.
+     */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.map_in_pager);
-        mAdapter = new MyAdapter(getSupportFragmentManager());
 
+        mAdapter = new MyAdapter(getSupportFragmentManager());
         mPager = findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
 
@@ -54,9 +54,10 @@ public class MapInPagerActivity extends AppCompatActivity {
         mPager.requestTransparentRegion(mPager);
     }
 
-    /** A simple FragmentPagerAdapter that returns two TextFragment and a SupportMapFragment. */
+    /**
+     * A simple FragmentPagerAdapter that returns two TextFragment and a SupportMapFragment.
+     */
     public static class MyAdapter extends FragmentPagerAdapter {
-
         MyAdapter(FragmentManager fm) {
             super(fm);
         }
@@ -79,5 +80,6 @@ public class MapInPagerActivity extends AppCompatActivity {
                     return null;
             }
         }
+
     }
 }
