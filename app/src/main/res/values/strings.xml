@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PGApp</string>
     <string name="title_activity_maps">Map</string>
-    <string name="map_in_pager_label">Map In Pager</string>
+    <string name="PGGO_app_label">PG GO</string>
 
     <string name="settings_title">Ustawienia aplikacji</string>
 
