@@ -1,6 +1,9 @@
 package pg.pgapp;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -43,6 +46,16 @@ public class Initializer {
         mechanicznyGroundOverlay.setTag(Building.MECHANICZNY);
 
         mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
+
+
+        //pobranie mojej lokalizacji
+        if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+                && ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            mMap.setMyLocationEnabled(true);
+        }
+
+
+      
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(noweEti)); //TODO: domyślnie będzie move to my location
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));

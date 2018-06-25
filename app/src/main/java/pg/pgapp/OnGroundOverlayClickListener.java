@@ -21,6 +21,7 @@ public class OnGroundOverlayClickListener implements GoogleMap.OnGroundOverlayCl
     public void onGroundOverlayClick(GroundOverlay groundOverlay) {
         Log.i("INFO",groundOverlay.getTag().toString());
         Intent intent = new Intent(_context, BuildingDetailsActivity.class);
+        intent.putExtra("TAG",groundOverlay.getTag().toString());
         _context.startActivity(intent);
     }
 }
