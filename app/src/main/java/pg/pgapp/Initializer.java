@@ -16,28 +16,37 @@ public class Initializer {
 
     public void Initialize(GoogleMap mMap, final Context context) {
         //nowe budynki
-        LatLng ETI = new LatLng(54.371690, 18.612353);
-        GroundOverlayOptions etiGroundOverlayOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.eti_pic))
-                .position(ETI, 40f, 30f);
+        LatLng noweEti = new LatLng(54.371648, 18.612357);
+        GroundOverlayOptions noweEtiGroundOverlayOptions = new GroundOverlayOptions()
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.neti))
+                .position(noweEti, 100f, 88f);
 
-        LatLng Mechaniczny = new LatLng(54.371612, 18.614723);
+        LatLng stareEti = new LatLng(54.370840, 18.613310);
+        GroundOverlayOptions stareEtiGroundOverlayOptions = new GroundOverlayOptions()
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.seti))
+                .position(stareEti, 125f, 63f);
+
+        LatLng mechaniczny = new LatLng(54.371612, 18.614723);
         GroundOverlayOptions mechanicznyGroundOverlayOptions = new GroundOverlayOptions()
-                .image(BitmapDescriptorFactory.fromResource(R.drawable.mecha))
-                .position(Mechaniczny, 100f, 90f);
+                .image(BitmapDescriptorFactory.fromResource(R.drawable.mech))
+                .position(mechaniczny, 85f, 150f);
 
 
         //przypisywanie ich do map | potrzebny zwrot z addGroundOverlay aby ustawić TAG oraz setClickable
-        GroundOverlay etiGroundOverlay = mMap.addGroundOverlay(etiGroundOverlayOptions);
-        etiGroundOverlay.setClickable(true);
-        etiGroundOverlay.setTag(Building.ETI);
+        GroundOverlay noweEtiGroundOverlay = mMap.addGroundOverlay(noweEtiGroundOverlayOptions);
+        noweEtiGroundOverlay.setClickable(true);
+        noweEtiGroundOverlay.setTag(Building.ETI);
 
-        GroundOverlay mechanicnzyGroundOverlay = mMap.addGroundOverlay(mechanicznyGroundOverlayOptions);
-        mechanicnzyGroundOverlay.setClickable(true);
-        mechanicnzyGroundOverlay.setTag(Building.MECHANICZNY);
+        GroundOverlay stareEtiGroundOverlay = mMap.addGroundOverlay(stareEtiGroundOverlayOptions);
+        stareEtiGroundOverlay.setClickable(false);
+        stareEtiGroundOverlay.setTag(Building.ETI);
 
+        GroundOverlay mechanicznyGroundOverlay = mMap.addGroundOverlay(mechanicznyGroundOverlayOptions);
+        mechanicznyGroundOverlay.setClickable(true);
+        mechanicznyGroundOverlay.setTag(Building.MECHANICZNY);
 
         mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
+
 
         //pobranie mojej lokalizacji
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
@@ -46,7 +55,9 @@ public class Initializer {
         }
 
 
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(ETI)); //TODO: domyślnie będzie move to my location
+      
+
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(noweEti)); //TODO: domyślnie będzie move to my location
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
     }
 }
