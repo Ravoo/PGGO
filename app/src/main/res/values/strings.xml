@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PGApp</string>
     <string name="title_activity_maps">Map</string>
-    <string name="map_in_pager_label">Map In Pager</string>
+    <string name="PGGO_app_label">PG GO</string>
 
     <string name="settings_title">Ustawienia aplikacji</string>
 
@@ -12,8 +12,8 @@
     <string name="compass_summary">Wyświetlaj ikonę kompasu</string>
     <string name="my_location_button">Przycisk lokalizacji</string>
     <string name="my_location_button_summary">Wyświetlaj przycisk lokalizacji</string>
-    <string name="my_location_layer">Warstwa lokalizacji</string>
-    <string name="my_location_layer_summary">Wyświetlaj informacje o lokalizacji</string>
+    <!--<string name="my_location_layer">Warstwa lokalizacji</string>
+    <string name="my_location_layer_summary">Wyświetlaj informacje o lokalizacji</string>-->
 
     <string name="all_gestures">Gesty</string>
     <string name="all_gestures_summary">Umożliwia wykorzystywanie gestów do kontrolowania mapy</string>
@@ -39,4 +39,7 @@
     <string name="more_information">Dodatkowe informacje</string>
     <string name="link_title">Dowiedz się więcej</string>
     <string name="link_summary">Strona główna Politechniki Gdańskiej</string>
+
+    <string name="ar_placeholder">AR Placeholder</string>
+
 </resources>

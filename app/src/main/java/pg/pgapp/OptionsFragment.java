@@ -3,7 +3,6 @@ package pg.pgapp;
 import android.app.UiModeManager;
 import android.content.Context;
 import android.os.Bundle;
-import android.support.v7.preference.CheckBoxPreference;
 import android.support.v7.preference.ListPreference;
 import android.support.v7.preference.Preference;
 import android.support.v7.preference.PreferenceFragmentCompat;
@@ -18,19 +17,25 @@ public class OptionsFragment extends PreferenceFragmentCompat {
     public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
         setPreferencesFromResource(R.xml.options_fragment, rootKey);
 
-        // Short demo how to use these preferences and set listener to them
         preferenceManager = getPreferenceManager();
 
         final SwitchPreferenceCompat nightMode = (SwitchPreferenceCompat) preferenceManager.findPreference("night_mode_preference");
-        final CheckBoxPreference polishLanguage = (CheckBoxPreference) preferenceManager.findPreference("language_pl_key");
-        final ListPreference textSize = (ListPreference) preferenceManager.findPreference("text_size");
-
-        polishLanguage.setOnPreferenceChangeListener(printInfoListener);
         nightMode.setOnPreferenceChangeListener(nightModeListener);
-        textSize.setOnPreferenceChangeListener(printInfoListener);
+
+        final ListPreference textSize = (ListPreference) preferenceManager.findPreference("text_size");
+        textSize.setOnPreferenceChangeListener(reloadActivityListener);
     }
 
-    private static Preference.OnPreferenceChangeListener printInfoListener = new Preference.OnPreferenceChangeListener() {
+    private Preference.OnPreferenceChangeListener reloadActivityListener = new Preference.OnPreferenceChangeListener() {
+        public boolean onPreferenceChange(Preference preference, Object newValue) {
+            // TODO moze da sie to jakos bardziej elegancko "przeladowac"
+            getActivity().finish();
+            getActivity().startActivity(getActivity().getIntent());
+            return true;
+        }
+    };
+
+    private Preference.OnPreferenceChangeListener printInfoListener = new Preference.OnPreferenceChangeListener() {
         public boolean onPreferenceChange(Preference preference, Object newValue) {
             Log.d("PGGO", "Pref " + preference.getKey() + " changed to " + newValue.toString());
             return true;

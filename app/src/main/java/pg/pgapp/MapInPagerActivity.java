@@ -16,16 +16,17 @@
 
 package pg.pgapp;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
-import com.google.android.gms.maps.SupportMapFragment;
 
 /**
  * This shows how to add a map to a ViewPager. Note the use of
@@ -37,12 +38,19 @@ public class MapInPagerActivity extends AppCompatActivity {
 
     private ViewPager mPager;
 
+    private SharedPreferences preferences;
+
     /**
      * Called when the activity is first created.
      */
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        String newTheme = preferences.getString("text_size", null);
+        setTheme(getNewTheme(newTheme));
+
         setContentView(R.layout.map_in_pager);
 
         mAdapter = new MyAdapter(getSupportFragmentManager());
@@ -52,6 +60,14 @@ public class MapInPagerActivity extends AppCompatActivity {
         // This is required to avoid a black flash when the map is loaded.  The flash is due
         // to the use of a SurfaceView as the underlying view of the map.
         mPager.requestTransparentRegion(mPager);
+    }
+
+    public static class ARPlaceholderFragment extends Fragment {
+
+        @Override
+        public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle bundle) {
+            return inflater.inflate(R.layout.ar_placeholder, container, false);
+        }
     }
 
     /**
@@ -75,11 +91,20 @@ public class MapInPagerActivity extends AppCompatActivity {
                 case 1:
                     return new ETIMapFragment();
                 case 2:
-                    return SupportMapFragment.newInstance();
+                    return new ARPlaceholderFragment();
                 default:
                     return null;
             }
         }
+    }
 
+    public static int getNewTheme(String newTheme) {
+        int themeID = R.style.FontSizeMedium;
+        if (newTheme.equals("small")) {
+            themeID = R.style.FontSizeSmall;
+        } else if (newTheme.equals("large")) {
+            themeID = R.style.FontSizeLarge;
+        }
+        return themeID;
     }
 }

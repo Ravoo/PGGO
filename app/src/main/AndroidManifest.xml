@@ -31,7 +31,7 @@
 
         <activity
             android:name=".MapInPagerActivity"
-            android:label="@string/map_in_pager_label">
+            android:label="@string/PGGO_app_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
