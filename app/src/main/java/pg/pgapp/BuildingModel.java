@@ -9,5 +9,8 @@ import java.util.ArrayList;
 public class BuildingModel {
     public String name;
     public FacultyModel owner;
+    public String faculty;
     public String picture;
+    public String description;
+
 }
