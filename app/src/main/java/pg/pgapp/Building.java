@@ -5,7 +5,8 @@ package pg.pgapp;
  */
 
 public enum Building {
-    ETI,
+    NETI,
+    SETI,
     MECHANICZNY,
-    OIO
+    OIO,
 }

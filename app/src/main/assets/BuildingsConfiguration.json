@@ -1,0 +1,26 @@
+[
+  {
+    "tag": "NETI",
+    "latitude": 54.371648,
+    "longitude": 18.612357,
+    "width": 100,
+    "height": 88,
+    "picture": "neti.bmp"
+  },
+  {
+    "tag": "SETI",
+    "latitude": 54.370840,
+    "longitude": 18.613310,
+    "width": 125,
+    "height": 63,
+    "picture": "seti.bmp"
+  },
+  {
+    "tag": "MECHANICZNY",
+    "latitude": 54.371612,
+    "longitude": 18.614723,
+    "width": 85,
+    "height": 150,
+    "picture": "mech.bmp"
+  }
+]
