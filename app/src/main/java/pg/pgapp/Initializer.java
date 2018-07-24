@@ -44,14 +44,13 @@ public class Initializer {
                     .image(BitmapDescriptorFactory.fromAsset(buildingDisplay.picture))
                     .position(location,buildingDisplay.width, buildingDisplay.height);
 
-            GroundOverlay noweEtiGroundOverlay = mMap.addGroundOverlay(gop);
-            noweEtiGroundOverlay.setClickable(true);
-            noweEtiGroundOverlay.setTag(buildingDisplay.tag);
+            GroundOverlay groundOverlay = mMap.addGroundOverlay(gop);
+            groundOverlay.setClickable(true);
+            groundOverlay.setTag(buildingDisplay.tag);
         }
 
         LatLng noweEti = new LatLng(54.371648, 18.612357);
         mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
-
 
         //pobranie mojej lokalizacji
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
