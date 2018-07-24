@@ -64,8 +64,8 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        Initializer initializer = new Initializer();
-        initializer.Initialize(mMap, getContext());
+        Initializer initializer = new Initializer(getContext());
+        initializer.Initialize(mMap);
         configureUI();
     }
 
