@@ -1,19 +1,21 @@
-package pg.pgapp;
+package pg.pgapp.Activities;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
 
-import org.w3c.dom.Text;
-
 import java.io.IOException;
 import java.io.InputStream;
+
+import pg.pgapp.Models.BuildingModel;
+import pg.pgapp.R;
 
 
 public class BuildingDetailsActivity extends AppCompatActivity {
@@ -26,6 +28,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         initializeDeatilView();
     }
 
+    BuildingModel buildingModel; //do change activity
+
     public void initializeDeatilView()
     {
         ImageView imageView = (ImageView)findViewById(R.id.buildingImageView);
@@ -37,6 +41,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
         Gson gson = new Gson();
         BuildingModel bm = gson.fromJson(readBuildingData(tag),BuildingModel.class);
+
+        buildingModel = bm;
 
         buildingNameTextView.setText(bm.name);
         buildingFacultyTextView.setText(bm.faculty);
@@ -72,5 +78,13 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         }
         Bitmap bitmap = BitmapFactory.decodeStream(istr);
         return bitmap;
+    }
+
+
+    public void changeActivity(View view)
+    {
+        Intent intent = new Intent(this, FacultyDetailsActivity.class);
+        intent.putExtra("TAG",buildingModel.facultyTag);
+        startActivity(intent);
     }
 }

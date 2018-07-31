@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package pg.pgapp;
+package pg.pgapp.Activities;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +27,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import pg.pgapp.ETIMapFragment;
+import pg.pgapp.OptionsFragment;
+import pg.pgapp.R;
 
 /**
  * This shows how to add a map to a ViewPager. Note the use of

@@ -4,6 +4,7 @@ package pg.pgapp;
  */
 
 public class BuildingDisplay {
+    //do wyświetlania na mapie
     public String tag;
     public double latitude;
     public double longitude;
