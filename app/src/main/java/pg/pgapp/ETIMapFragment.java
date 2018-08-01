@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -23,11 +24,7 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     private SharedPreferences preferences;
 
     private final SharedPreferences.OnSharedPreferenceChangeListener listener =
-            new SharedPreferences.OnSharedPreferenceChangeListener() {
-                public void onSharedPreferenceChanged(SharedPreferences prefs, String key) {
-                    configureUI();
-                }
-            };
+            (prefs, key) -> configureUI();
 
     public static SupportMapFragment newInstance() {
         Bundle args = new Bundle();
@@ -37,7 +34,7 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         preferences.registerOnSharedPreferenceChangeListener(listener);
         return inflater.inflate(R.layout.activity_maps, null);
@@ -65,7 +62,7 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
         Initializer initializer = new Initializer(getContext());
-        initializer.Initialize(mMap);
+        initializer.initialize(mMap);
         configureUI();
     }
 
