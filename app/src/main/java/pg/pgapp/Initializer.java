@@ -38,8 +38,11 @@ public class Initializer {
     }
 
     public void initialize(final @NonNull GoogleMap mMap) {
-        final Type listType = new TypeToken<ArrayList<BuildingDisplay>>() {}.getType(); //potrzebne żeby wczytać listę obiektów z jsona
+        final Type listType = new TypeToken<ArrayList<BuildingDisplay>>() {
+        }.getType(); //potrzebne żeby wczytać listę obiektów z jsona
 
+        // todo zaladowac z bazy, nie z jsona
+        // todo open database, db helper
         final Gson gson = new Gson();
         final ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
 
@@ -50,13 +53,11 @@ public class Initializer {
                             .strokeColor(Color.RED)
                             .strokeWidth(2);
 
-                    for (int i = 0; i < building.latitudes.size(); i++) {
-                        buildingOptions.add(new LatLng(building.latitudes.get(i), building.longitudes.get(i)));
-                    }
+                    building.getPoints().forEach(point -> buildingOptions.add(new LatLng(point.getLatitude(), point.getLongitude())));
 
                     Polygon polygon = mMap.addPolygon(buildingOptions);
                     polygon.setClickable(true);
-                    polygon.setTag(building.tag);
+                    polygon.setTag(building.getTag());
                 }
         );
 
