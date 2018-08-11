@@ -13,7 +13,6 @@ import lombok.Setter;
 @Getter
 @Setter
 public class BuildingDisplay {
-    //do wyświetlania na mapie
     private String tag;
-    private List<Point> points;
+    private List<Coordinate> coordinates;
 }

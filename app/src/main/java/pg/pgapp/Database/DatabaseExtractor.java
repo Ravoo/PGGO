@@ -1,4 +1,4 @@
-package pg.pgapp;
+package pg.pgapp.Database;
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,6 +7,8 @@ import java.util.ArrayList;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
+import pg.pgapp.BuildingDisplay;
+import pg.pgapp.Coordinate;
 
 @RequiredArgsConstructor
 public class DatabaseExtractor {
@@ -15,7 +17,7 @@ public class DatabaseExtractor {
     public ArrayList<BuildingDisplay> getBuildings() {
         ArrayList<BuildingDisplay> buildings = new ArrayList<>();
         setTags(buildings);
-        setPoints(buildings);
+        setCoordinates(buildings);
         return buildings;
     }
 
@@ -29,16 +31,15 @@ public class DatabaseExtractor {
         cursor.close();
     }
 
-    private void setPoints(ArrayList<BuildingDisplay> buildings) {
-        Cursor cursor = sqLiteDatabase.rawQuery("Select * from points;", null);
-        ArrayList<Point> points = new ArrayList<>();
+    private void setCoordinates(ArrayList<BuildingDisplay> buildings) {
+        Cursor cursor = sqLiteDatabase.rawQuery("Select * from coordinates;", null);
+        ArrayList<Coordinate> coordinates = new ArrayList<>();
         if (cursor.moveToFirst()) {
             do {
                 final Double longitude = cursor.getDouble(1);
                 final Double latitude = cursor.getDouble(2);
-                points.add(new Point(longitude, latitude));
-                // todo nadmiarowe dodawanie za kazdym razem punktow
-                buildings.get(cursor.getInt(3)).setPoints(points);
+                coordinates.add(new Coordinate(longitude, latitude));
+                buildings.get(cursor.getInt(3)).setCoordinates(coordinates);
             } while (cursor.moveToNext());
         }
         cursor.close();

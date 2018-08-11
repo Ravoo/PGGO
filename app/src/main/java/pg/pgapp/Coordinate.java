@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @RequiredArgsConstructor
-public class Point {
+public class Coordinate {
     private final Double longitude;
     private final Double latitude;
 }

@@ -1,4 +1,4 @@
-package pg.pgapp;
+package pg.pgapp.Database;
 
 import android.content.Context;
 import android.database.SQLException;
@@ -13,8 +13,8 @@ import java.io.OutputStream;
 
 public class DataBaseHelper extends SQLiteOpenHelper {
 
-    //The Android's default system path of your application database.
-    private static String DB_PATH = "/data/data/pg.pgapp/databases/";
+    // todo change to server address
+    private static String DB_PATH;
 
     private static String DB_NAME = "baza.db";
     private final Context myContext;
@@ -23,13 +23,12 @@ public class DataBaseHelper extends SQLiteOpenHelper {
     public DataBaseHelper(Context context) {
         super(context, DB_NAME, null, 1);
         this.myContext = context;
+        DB_PATH = context.getApplicationInfo().dataDir + "/databases/";
     }
 
-    public void createDataBase() throws IOException {
-        boolean dbExist = checkDataBase();
-
+    public void createDataBase() {
         //todo debug always override
-        // if (!dbExist) {
+        // if (!databaseExists()) {
         this.getReadableDatabase();
 
         try {
@@ -40,7 +39,7 @@ public class DataBaseHelper extends SQLiteOpenHelper {
         //  }
     }
 
-    private boolean checkDataBase() {
+    private boolean databaseExists() {
         SQLiteDatabase checkDB = null;
         try {
             String myPath = DB_PATH + DB_NAME;
