@@ -35,7 +35,6 @@ public class Initializer {
         Gson gson = new Gson();
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromfile("BuildingsConfiguration.json"),listType);
 
-
         for(int i = 0; i< buildings.size(); i++)
         {
             BuildingDisplay buildingDisplay = buildings.get(i);
@@ -58,8 +57,6 @@ public class Initializer {
             mMap.setMyLocationEnabled(true);
         }
 
-
-      
 
         mMap.moveCamera(CameraUpdateFactory.newLatLng(noweEti)); //TODO: domyślnie będzie move to my location
         mMap.animateCamera(CameraUpdateFactory.zoomTo(18));

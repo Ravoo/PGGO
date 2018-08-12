@@ -7,6 +7,8 @@ import android.util.Log;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.GroundOverlay;
 
+import pg.pgapp.Activities.BuildingDetailsActivity;
+
 /**
  * Created by Ravo on 23.06.2018.
  */

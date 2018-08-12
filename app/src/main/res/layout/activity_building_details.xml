@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="pg.pgapp.BuildingDetailsActivity">
+    tools:context="pg.pgapp.Activities.BuildingDetailsActivity">
 
     <TextView
         android:id="@+id/buildingName"
@@ -53,6 +53,8 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/textView3"
         android:textSize="18sp"
+        android:clickable="true"
+        android:onClick="changeActivity"
         tools:text="In this place should be building faculty name" />
 
     <ScrollView
