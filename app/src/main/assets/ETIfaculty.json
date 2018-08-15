@@ -5,8 +5,8 @@
     {"name": "kask" },
     {"name": "kio" },
     {"name": "kisi" },
-    {"name": "ksg" },
-    {"name": "dupa" },
-    {"name": "cycki" }
+    {
+      "name": "ksg"
+    }
   ]
 }

@@ -2,11 +2,16 @@ package pg.pgapp.Models;
 
 import java.util.List;
 
-/**
- * Created by Ravo on 24.06.2018.
- */
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public class FacultyModel {
-    public String name;
+@AllArgsConstructor
+@Getter
+public class FacultyModel extends BaseModel {
     public List<DepartmentModel> departments;
+
+    public FacultyModel(String name, String tag, List<DepartmentModel> departments) {
+        super(name, tag);
+        this.departments = departments;
+    }
 }
