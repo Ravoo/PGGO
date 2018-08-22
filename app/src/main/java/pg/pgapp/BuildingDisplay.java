@@ -1,25 +1,16 @@
 package pg.pgapp;
+
+import java.util.List;
+
+import lombok.AllArgsConstructor;
+
 /**
  * Created by Ravo on 24.07.2018.
  */
-
+@AllArgsConstructor
 public class BuildingDisplay {
     //do wyświetlania na mapie
     public String tag;
-    public double latitude;
-    public double longitude;
-    public float height;
-    public float width;
-    public String picture;
-
-    public BuildingDisplay(String tag, double latitude, double longitude, float height, float width, String picture)
-    {
-        this.tag = tag;
-        this.latitude = latitude;
-        this.longitude = longitude;
-        this.height = height;
-        this.width = width;
-        this.picture = picture;
-    }
-
+    public List<Double> latitudes;
+    public List<Double> longitudes;
 }

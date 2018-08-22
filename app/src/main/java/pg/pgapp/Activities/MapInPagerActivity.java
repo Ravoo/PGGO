@@ -60,6 +60,7 @@ public class MapInPagerActivity extends AppCompatActivity {
         mAdapter = new MyAdapter(getSupportFragmentManager());
         mPager = findViewById(R.id.pager);
         mPager.setAdapter(mAdapter);
+        mPager.setCurrentItem(1);
 
         // This is required to avoid a black flash when the map is loaded.  The flash is due
         // to the use of a SurfaceView as the underlying view of the map.
@@ -104,10 +105,12 @@ public class MapInPagerActivity extends AppCompatActivity {
 
     public static int getNewTheme(String newTheme) {
         int themeID = R.style.FontSizeMedium;
-        if (newTheme.equals("small")) {
-            themeID = R.style.FontSizeSmall;
-        } else if (newTheme.equals("large")) {
-            themeID = R.style.FontSizeLarge;
+        if(newTheme != null) {
+            if (newTheme.equals("small")) {
+                themeID = R.style.FontSizeSmall;
+            } else if (newTheme.equals("large")) {
+                themeID = R.style.FontSizeLarge;
+            }
         }
         return themeID;
     }
