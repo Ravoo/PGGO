@@ -8,12 +8,11 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 
-import pg.pgapp.Database.DatabaseExtractor;
+import pg.pgapp.Database.DatabaseConnector;
 import pg.pgapp.Models.BuildingModel;
 import pg.pgapp.R;
 
@@ -38,40 +37,20 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String tag = intent.getStringExtra("TAG");
 
-        // todo remove when database configured
-        if (new DatabaseExtractor().isDatabaseReady()) {
-            Gson gson = new Gson();
-            buildingModel = gson.fromJson(readBuildingData(tag), BuildingModel.class);
-        } else {
-            buildingModel = new DatabaseExtractor().getBuildingModel(tag);
-        }
+        // todo find way to switch tag to id
+        buildingModel = new DatabaseConnector().getBuildingModel(1L);
         buildingNameTextView.setText(buildingModel.getName());
-        buildingFacultyTextView.setText(buildingModel.getFaculty());
+        buildingFacultyTextView.setText(buildingModel.getFaculties().toString());
         buildingDescription.setText(buildingModel.getDescription());
-        imageView.setImageBitmap(BitmapFactory.decodeStream(buildingModel.getPicture()));
+
+        // todo check if works
+        InputStream stream = new ByteArrayInputStream(buildingModel.getPicture().getBytes(StandardCharsets.UTF_8));
+        imageView.setImageBitmap(BitmapFactory.decodeStream(stream));
     }
 
     public void changeActivity(View view) {
         Intent intent = new Intent(this, FacultyDetailsActivity.class);
         intent.putExtra("TAG", buildingModel.getTag());
         startActivity(intent);
-    }
-
-    public String readBuildingData(String tag)
-    {
-        String json = null;
-        String filename = tag + ".json";
-        InputStream inputStream = null;
-        try {
-            inputStream = this.getAssets().open(filename);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            json = new String(buffer,"UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 }

@@ -9,13 +9,9 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.google.gson.Gson;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 
-import pg.pgapp.Database.DatabaseExtractor;
+import pg.pgapp.Database.DatabaseConnector;
 import pg.pgapp.Models.FacultyModel;
 import pg.pgapp.R;
 
@@ -37,14 +33,8 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
         Intent intent = getIntent();
         String tag = intent.getStringExtra("TAG");
 
-        // todo remove when database configured
-        FacultyModel facultyModel;
-        if (new DatabaseExtractor().isDatabaseReady()) {
-            Gson gson = new Gson();
-            facultyModel = gson.fromJson(readDataFromFile(tag + "faculty.json"), FacultyModel.class);
-        } else {
-            facultyModel = new DatabaseExtractor().getFacultyModel(tag);
-        }
+        // todo find way to switch tag to id
+        FacultyModel facultyModel = new DatabaseConnector().getFacultyModel(2L);
         facultyNameTextView.setText(facultyModel.getName());
 
         ArrayList<String> departmentsForSpinner = new ArrayList<>();
@@ -54,22 +44,6 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departmentsForSpinner);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);
-    }
-
-    public String readDataFromFile(String filename) {
-        String json = null;
-        InputStream inputStream = null;
-        try {
-            inputStream = getAssets().open(filename);
-            int size = inputStream.available();
-            byte[] buffer = new byte[size];
-            inputStream.read(buffer);
-            inputStream.close();
-            json = new String(buffer, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return json;
     }
 
     @Override

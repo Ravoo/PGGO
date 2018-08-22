@@ -1,6 +1,6 @@
 package pg.pgapp.Models;
 
-import java.io.InputStream;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,16 +8,14 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BuildingModel extends BaseModel {
-    // to pole moze nie jest juz potrzebne, bo i tak osobno potrzebujemy tego, co zawiera. Zawolamy po to, jak bedzie potrzebne
-    public FacultyModel owner;
-    public String faculty;
-    public InputStream picture;
+
+    public List<String> faculties;
+    public String picture;
     public String description;
 
-    public BuildingModel(String name, String tag, FacultyModel owner, String faculty, InputStream picture, String description) {
+    public BuildingModel(String name, String tag, List<String> faculties, String picture, String description) {
         super(name, tag);
-        this.owner = owner;
-        this.faculty = faculty;
+        this.faculties = faculties;
         this.picture = picture;
         this.description = description;
     }
