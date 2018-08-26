@@ -38,7 +38,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         String tag = intent.getStringExtra("TAG");
 
         // todo find way to switch tag to id
-        buildingModel = new DatabaseConnector().getBuildingModel(1L);
+        buildingModel = new DatabaseConnector().getBuildingModel(Long.parseLong(tag));
         buildingNameTextView.setText(buildingModel.getName());
         buildingFacultyTextView.setText(buildingModel.getFaculties().toString());
         buildingDescription.setText(buildingModel.getDescription());

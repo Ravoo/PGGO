@@ -8,7 +8,7 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BuildingModel extends BaseModel {
-
+    public long id;
     public List<String> faculties;
     public String picture;
     public String description;

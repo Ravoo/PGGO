@@ -48,6 +48,7 @@ public class Initializer {
         Type listType = new TypeToken<ArrayList<BuildingDisplay>>() {
         }.getType(); //potrzebne żeby wczytać listę obiektów z jsona
         Gson gson = new Gson();
+        //todo DatabaseConnector.getBuildings, dodac clean do projektu
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
 
         buildings.forEach(
@@ -62,7 +63,7 @@ public class Initializer {
 
                     Polygon polygon = mMap.addPolygon(buildingOptions);
                     polygon.setClickable(true);
-                    polygon.setTag(building.getTag());
+                    polygon.setTag(4L);
                 }
         );
         mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));

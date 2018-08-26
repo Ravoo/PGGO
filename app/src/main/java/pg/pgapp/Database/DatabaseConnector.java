@@ -23,7 +23,7 @@ import pg.pgapp.Models.FacultyModel;
 
 public class DatabaseConnector {
 
-    private static String URL = "http://192.168.0.103:8080/";
+    private static String URL = "http://192.168.0.104:8080/";
     private static String BUILDING_PATH = "building/";
     private static String FACULTY_PATH = "faculty/";
     private static String DEPARTMENT_PATH = "department/";

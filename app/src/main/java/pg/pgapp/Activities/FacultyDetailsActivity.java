@@ -34,7 +34,7 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
         String tag = intent.getStringExtra("TAG");
 
         // todo find way to switch tag to id
-        FacultyModel facultyModel = new DatabaseConnector().getFacultyModel(2L);
+        FacultyModel facultyModel = new DatabaseConnector().getFacultyModel(Long.parseLong(tag));
         facultyNameTextView.setText(facultyModel.getName());
 
         ArrayList<String> departmentsForSpinner = new ArrayList<>();
