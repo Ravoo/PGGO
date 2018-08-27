@@ -63,7 +63,8 @@ public class Initializer {
 
                     Polygon polygon = mMap.addPolygon(buildingOptions);
                     polygon.setClickable(true);
-                    polygon.setTag(4L);
+                    //todo hardcoded
+                    polygon.setTag(1L);
                 }
         );
         mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));

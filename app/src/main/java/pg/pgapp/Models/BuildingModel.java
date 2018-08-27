@@ -8,13 +8,13 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class BuildingModel extends BaseModel {
-    public long id;
-    public List<String> faculties;
-    public String picture;
-    public String description;
+    // todo change to List<Faculty>
+    private List<Long> faculties;
+    private String picture;
+    private String description;
 
-    public BuildingModel(String name, String tag, List<String> faculties, String picture, String description) {
-        super(name, tag);
+    public BuildingModel(long id, String name, String tag, List<Long> faculties, String picture, String description) {
+        super(id, name, tag);
         this.faculties = faculties;
         this.picture = picture;
         this.description = description;

@@ -37,10 +37,11 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         Intent intent = getIntent();
         String tag = intent.getStringExtra("TAG");
 
-        // todo find way to switch tag to id
         buildingModel = new DatabaseConnector().getBuildingModel(Long.parseLong(tag));
         buildingNameTextView.setText(buildingModel.getName());
-        buildingFacultyTextView.setText(buildingModel.getFaculties().toString());
+        //todo list faculties, separate textview(?) for each
+        buildingFacultyTextView.setText(buildingModel.getFaculties().get(0).toString() + " " +
+        buildingModel.getFaculties().get(1).toString());
         buildingDescription.setText(buildingModel.getDescription());
 
         // todo check if works
@@ -50,7 +51,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
     public void changeActivity(View view) {
         Intent intent = new Intent(this, FacultyDetailsActivity.class);
-        intent.putExtra("TAG", buildingModel.getTag());
+        intent.putExtra("TAG", buildingModel.getFaculties().get(0).toString());
         startActivity(intent);
     }
 }
