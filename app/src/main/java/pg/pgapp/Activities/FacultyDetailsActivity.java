@@ -31,15 +31,12 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
     private void initializeDetailView() {
         TextView facultyNameTextView = findViewById(R.id.facultyNameTextView);
         Intent intent = getIntent();
-        String tag = intent.getStringExtra("TAG");
+        Long tag = intent.getLongExtra("TAG", 2);
 
-        FacultyModel facultyModel = new DatabaseConnector().getFacultyModel(Long.parseLong(tag));
+        FacultyModel facultyModel = new DatabaseConnector().getFacultyModel(tag);
         facultyNameTextView.setText(facultyModel.getName());
 
-        ArrayList<String> departmentsForSpinner = new ArrayList<>();
-        for (int i = 0; i < facultyModel.getDepartments().size(); i++) {
-            departmentsForSpinner.add(facultyModel.getDepartments().get(i).getName());
-        }
+        ArrayList<String> departmentsForSpinner = new ArrayList<>(facultyModel.getDepartmentsNames());
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departmentsForSpinner);
         spinner.setAdapter(adapter);
         spinner.setOnItemSelectedListener(this);

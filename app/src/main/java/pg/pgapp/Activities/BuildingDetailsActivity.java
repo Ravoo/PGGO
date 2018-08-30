@@ -39,9 +39,14 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
         buildingModel = new DatabaseConnector().getBuildingModel(Long.parseLong(tag));
         buildingNameTextView.setText(buildingModel.getName());
-        //todo list faculties, separate textview(?) for each
-        buildingFacultyTextView.setText(buildingModel.getFaculties().get(0).toString() + " " +
-        buildingModel.getFaculties().get(1).toString());
+
+        StringBuilder facultiesNames = new StringBuilder();
+        for (String facultyName : buildingModel.getFacultiesNames()) {
+            facultiesNames
+                    .append(facultyName)
+                    .append("\n");
+        }
+        buildingFacultyTextView.setText(facultiesNames.toString());
         buildingDescription.setText(buildingModel.getDescription());
 
         // todo check if works
@@ -51,7 +56,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
     public void changeActivity(View view) {
         Intent intent = new Intent(this, FacultyDetailsActivity.class);
-        intent.putExtra("TAG", buildingModel.getFaculties().get(0).toString());
+        intent.putExtra("TAG", buildingModel.getFacultiesIds().get(0));
         startActivity(intent);
     }
 }
