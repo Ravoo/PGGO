@@ -11,15 +11,14 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.lang.reflect.Type;
 import java.util.ArrayList;
 
 import lombok.NonNull;
+import pg.pgapp.Database.DatabaseConnector;
+import pg.pgapp.Models.BuildingDisplayModel;
 
 public class Initializer {
 
@@ -45,12 +44,13 @@ public class Initializer {
     }
 
     private void setBuildingsOnMap(@NonNull final GoogleMap mMap) {
-        Type listType = new TypeToken<ArrayList<BuildingDisplay>>() {
+        /*        //todo skonfigurowac ewentualne pobieranie danych z pliku lokalnie
+        Type listType = new TypeToken<ArrayList<BuildingDisplayModel>>() {
         }.getType(); //potrzebne żeby wczytać listę obiektów z jsona
         Gson gson = new Gson();
-        //todo DatabaseConnector.getBuildings, dodac clean do projektu
-        ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
-
+        ArrayList<BuildingDisplayModel> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
+        */
+        ArrayList<BuildingDisplayModel> buildings = new DatabaseConnector().getBuildingDisplays(0L);
         buildings.forEach(
                 building -> {
                     PolygonOptions buildingOptions = new PolygonOptions()
@@ -63,8 +63,7 @@ public class Initializer {
 
                     Polygon polygon = mMap.addPolygon(buildingOptions);
                     polygon.setClickable(true);
-                    //todo hardcoded
-                    polygon.setTag(1L);
+                    polygon.setTag(building.getBuildingId());
                 }
         );
         mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));

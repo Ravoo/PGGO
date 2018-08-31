@@ -1,16 +1,14 @@
 package pg.pgapp.Activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.io.ByteArrayInputStream;
-import java.io.InputStream;
-import java.nio.charset.StandardCharsets;
 
 import pg.pgapp.Database.DatabaseConnector;
 import pg.pgapp.Models.BuildingModel;
@@ -49,9 +47,9 @@ public class BuildingDetailsActivity extends AppCompatActivity {
         buildingFacultyTextView.setText(facultiesNames.toString());
         buildingDescription.setText(buildingModel.getDescription());
 
-        // todo check if works
-        InputStream stream = new ByteArrayInputStream(buildingModel.getPicture().getBytes(StandardCharsets.UTF_8));
-        imageView.setImageBitmap(BitmapFactory.decodeStream(stream));
+        byte[] decodedString = Base64.decode(buildingModel.getPicture(), Base64.DEFAULT);
+        Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
+        imageView.setImageBitmap(decodedByte);
     }
 
     public void changeActivity(View view) {

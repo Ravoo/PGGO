@@ -17,14 +17,17 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import pg.pgapp.Models.BaseModel;
+import pg.pgapp.Models.BuildingDisplayModel;
 import pg.pgapp.Models.BuildingModel;
 import pg.pgapp.Models.DepartmentModel;
 import pg.pgapp.Models.FacultyModel;
 
 public class DatabaseConnector {
 
+    // todo change to server ip:port
     private static String URL = "http://192.168.0.104:8080/";
     private static String BUILDING_PATH = "building/";
+    private static String BUILDING_DISPLAY_PATH = "building/display/";
     private static String FACULTY_PATH = "faculty/";
     private static String DEPARTMENT_PATH = "department/";
 
@@ -34,7 +37,11 @@ public class DatabaseConnector {
         HttpURLConnection urlConnection;
         String serverResponse = "";
         try {
-            url = new URL(URL + path + id);
+            if (id == 0) {
+                url = new URL(URL + path);
+            } else {
+                url = new URL(URL + path + id);
+            }
             urlConnection = (HttpURLConnection) url.openConnection();
 
             int responseCode = urlConnection.getResponseCode();
@@ -85,7 +92,12 @@ public class DatabaseConnector {
         return new Gson().fromJson(getModel(DEPARTMENT_PATH, id), DepartmentModel.class);
     }
 
-    //todo check if Gson is getting content or trash for all modelS
+    //note getting multiple data is defined with Pageable, except BuildingDisplayModel
+    private ArrayList<BuildingModel> getDatabaseBuildingDisplaysModels(Long id) {
+        return new Gson().fromJson(getModel(BUILDING_DISPLAY_PATH, id), new TypeToken<ArrayList<BuildingDisplayModel>>() {
+        }.getType());
+    }
+
     private ArrayList<BuildingModel> getDatabaseBuildingModels(Long id) {
         return new Gson().fromJson(getModel(BUILDING_PATH, id), new TypeToken<ArrayList<BuildingModel>>() {
         }.getType());
@@ -143,6 +155,8 @@ public class DatabaseConnector {
         ExecutorService executorService = Executors.newSingleThreadExecutor();
         Future<ArrayList<? extends BaseModel>> result = executorService.submit(() -> {
             switch (modelType) {
+                case BUILDING_DISPLAY:
+                    return getDatabaseBuildingDisplaysModels(id);
                 case BUILDING:
                     return getDatabaseBuildingModels(id);
                 case FACULTY:
@@ -165,15 +179,19 @@ public class DatabaseConnector {
         return model;
     }
 
-    private ArrayList<BuildingModel> getBuildingModels(Long id) {
+    public ArrayList<BuildingDisplayModel> getBuildingDisplays(Long id) {
+        return (ArrayList<BuildingDisplayModel>) getModels(id, ModelType.BUILDING_DISPLAY);
+    }
+
+    public ArrayList<BuildingModel> getBuildingModels(Long id) {
         return (ArrayList<BuildingModel>) getModels(id, ModelType.BUILDING);
     }
 
-    private ArrayList<FacultyModel> getFacultyModels(Long id) {
+    public ArrayList<FacultyModel> getFacultyModels(Long id) {
         return (ArrayList<FacultyModel>) getModels(id, ModelType.FACULTY);
     }
 
-    private ArrayList<DepartmentModel> getDepartmentModels(Long id) {
+    public ArrayList<DepartmentModel> getDepartmentModels(Long id) {
         return (ArrayList<DepartmentModel>) getModels(id, ModelType.DEPARTMENT);
     }
 }

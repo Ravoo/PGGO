@@ -1,11 +1,11 @@
-package pg.pgapp;
+package pg.pgapp.Models;
 
 import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import pg.pgapp.Models.BuildingModel;
+import pg.pgapp.Coordinate;
 
 /**
  * Created by Ravo on 24.07.2018.
@@ -13,8 +13,7 @@ import pg.pgapp.Models.BuildingModel;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BuildingDisplay {
-    private String tag;
-    private BuildingModel building;
+public class BuildingDisplayModel extends BaseModel {
+    private Long buildingId;
     private List<Coordinate> coordinates;
 }
