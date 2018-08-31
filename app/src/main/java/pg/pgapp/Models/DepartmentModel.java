@@ -1,9 +1,18 @@
 package pg.pgapp.Models;
 
-/**
- * Created by Ravo on 24.06.2018.
- */
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-public class DepartmentModel {
-        public String name;
+@AllArgsConstructor
+@Getter
+public class DepartmentModel extends BaseModel {
+    public String description;
+
+    public long facultyId;
+
+    public DepartmentModel(String name, String tag, String description, long facultyId) {
+        super(name, tag);
+        this.description = description;
+        this.facultyId = facultyId;
+    }
 }

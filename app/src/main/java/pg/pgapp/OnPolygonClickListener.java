@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.util.Log;
 
 import com.google.android.gms.maps.GoogleMap;
-import com.google.android.gms.maps.model.GroundOverlay;
 import com.google.android.gms.maps.model.Polygon;
 
 import pg.pgapp.Activities.BuildingDetailsActivity;

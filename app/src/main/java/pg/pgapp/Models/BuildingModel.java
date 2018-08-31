@@ -1,14 +1,22 @@
 package pg.pgapp.Models;
 
-/**
- * Created by Ravo on 24.06.2018.
- */
+import java.util.List;
 
-public class BuildingModel {
-    public String name;
-    public FacultyModel owner;
-    public String faculty;
-    public String facultyTag;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
+@AllArgsConstructor
+@Getter
+public class BuildingModel extends BaseModel {
+
+    public List<String> faculties;
     public String picture;
     public String description;
+
+    public BuildingModel(String name, String tag, List<String> faculties, String picture, String description) {
+        super(name, tag);
+        this.faculties = faculties;
+        this.picture = picture;
+        this.description = description;
+    }
 }

@@ -23,6 +23,8 @@ android {
 }
 
 dependencies {
+    implementation 'com.google.android.gms:play-services-auth:16.0.0'
+    implementation 'mysql:mysql-connector-java:5.1.6'
     compileOnly 'org.projectlombok:lombok:1.18.2'
     annotationProcessor 'org.projectlombok:lombok:1.18.2'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
