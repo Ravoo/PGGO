@@ -1,5 +1,5 @@
 package pg.pgapp.Database;
 
 public enum ModelType {
-    BUILDING, FACULTY, DEPARTMENT
+    BUILDING_DISPLAY, BUILDING, FACULTY, DEPARTMENT
 }

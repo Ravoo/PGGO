@@ -8,10 +8,10 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class FacultyModel extends BaseModel {
-    public List<DepartmentModel> departments;
+    private List<String> departmentsNames;
 
-    public FacultyModel(String name, String tag, List<DepartmentModel> departments) {
-        super(name, tag);
-        this.departments = departments;
+    public FacultyModel(long id, String name, String tag, List<String> departmentsNames) {
+        super(id, name, tag);
+        this.departmentsNames = departmentsNames;
     }
 }

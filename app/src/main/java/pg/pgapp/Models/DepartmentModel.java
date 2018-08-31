@@ -6,12 +6,11 @@ import lombok.Getter;
 @AllArgsConstructor
 @Getter
 public class DepartmentModel extends BaseModel {
-    public String description;
+    private String description;
+    private long facultyId;
 
-    public long facultyId;
-
-    public DepartmentModel(String name, String tag, String description, long facultyId) {
-        super(name, tag);
+    public DepartmentModel(long id, String name, String tag, String description, long facultyId) {
+        super(id, name, tag);
         this.description = description;
         this.facultyId = facultyId;
     }
