@@ -42,4 +42,8 @@
 
     <string name="ar_placeholder">AR Placeholder</string>
 
+
+    <string name="main_menu">PGGO \n menu główne</string>
+    <string name="options_button">Ustawienia</string>
+
 </resources>
