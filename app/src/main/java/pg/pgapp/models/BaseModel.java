@@ -1,4 +1,4 @@
-package pg.pgapp.Models;
+package pg.pgapp.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Getter
 public abstract class BaseModel {
-    private long id;
-    private String name;
-    private String tag;
+	private long id;
+	private String name;
+	private String tag;
 }

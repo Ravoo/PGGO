@@ -1,73 +1,83 @@
 <android.support.v7.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/app_name">
+    android:title="@string/app_name"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent">
 
     <Preference
         android:icon="@android:drawable/ic_menu_mapmode"
         android:title="@string/settings_title" />
 
     <PreferenceCategory android:title="@string/general_settings">
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="UI_settings_zoom"
             android:summary="@string/zoom_buttons_summary"
-            android:title="@string/zoom_buttons"
-            android:defaultValue="true"/>
+            android:title="@string/zoom_buttons" />
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="UI_settings_compass"
             android:summary="@string/compass_summary"
-            android:title="@string/compass"
-            android:defaultValue="true"/>
+            android:title="@string/compass" />
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="UI_settings_my_location"
             android:summary="@string/my_location_button_summary"
-            android:title="@string/my_location_button"
-            android:defaultValue="true"/>
+            android:title="@string/my_location_button" />
         <!--<SwitchPreferenceCompat
             android:key="UI_settings_location_info"
             android:summary="@string/my_location_layer_summary"
             android:title="@string/my_location_layer" />-->
 
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:key="general_gesture_settings"
             android:summary="@string/all_gestures_summary"
-            android:title="@string/all_gestures"
-            android:defaultValue="true"/>
+            android:title="@string/all_gestures" />
 
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:dependency="general_gesture_settings"
             android:key="gesture_setting_scroll"
             android:layout="?android:attr/preferenceLayoutChild"
             android:summary="@string/scroll_gestures_summary"
-            android:title="@string/scroll_gestures"
-            android:defaultValue="true"/>
+            android:title="@string/scroll_gestures" />
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:dependency="general_gesture_settings"
             android:key="gesture_setting_zoom"
             android:layout="?android:attr/preferenceLayoutChild"
             android:summary="@string/zoom_gestures_summary"
-            android:title="@string/zoom_gestures"
-            android:defaultValue="true"/>
+            android:title="@string/zoom_gestures" />
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:dependency="general_gesture_settings"
             android:key="gesture_setting_tilt"
             android:layout="?android:attr/preferenceLayoutChild"
             android:summary="@string/tilt_gestures_summary"
-            android:title="@string/tilt_gestures"
-            android:defaultValue="true"/>
+            android:title="@string/tilt_gestures" />
+
         <SwitchPreferenceCompat
+            android:defaultValue="true"
             android:dependency="general_gesture_settings"
             android:key="gesture_setting_rotate"
             android:layout="?android:attr/preferenceLayoutChild"
             android:summary="@string/rotate_gestures_summary"
-            android:title="@string/rotate_gestures"
-            android:defaultValue="true"/>
+            android:title="@string/rotate_gestures" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/user_style_settings">
+
         <SwitchPreferenceCompat
+            android:defaultValue="false"
             android:key="night_mode_preference"
             android:summary="@string/night_mode_summary"
-            android:title="@string/night_mode"
-            android:defaultValue="false"/>
+            android:title="@string/night_mode" />
+
         <ListPreference
             android:defaultValue="2"
             android:entries="@array/text_size_names_array"
@@ -78,10 +88,12 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/regional_settings">
+
         <CheckBoxPreference
             android:checked="false"
             android:key="language_pl_key"
             android:title="@string/language_pl" />
+
         <CheckBoxPreference
             android:enabled="false"
             android:key="language_eng_key"
@@ -89,9 +101,11 @@
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/more_information">
+
         <PreferenceScreen
             android:summary="@string/link_summary"
             android:title="@string/link_title">
+
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://pg.edu.pl/" />
