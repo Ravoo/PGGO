@@ -13,7 +13,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:text="TextView"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:gravity="center_vertical|center_horizontal"/>
 
     <Spinner
         android:id="@+id/departmentsSpiner"
@@ -22,13 +23,41 @@
         android:layout_alignParentStart="true"
         android:layout_below="@+id/facultyNameTextView" />
 
+    <!--<TextView-->
+        <!--android:id="@+id/selectedTextView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/departmentsSpiner"-->
+        <!--android:layout_centerHorizontal="true"-->
+        <!--android:layout_marginTop="56dp"-->
+        <!--android:text="TextView"-->
+        <!--android:textSize="30sp" />-->
+
     <TextView
-        android:id="@+id/selectedTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#123456"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="JAKAS STOPKA"
+        android:textSize="18sp"
+        android:layout_gravity="bottom"
+        android:layout_alignParentBottom="true"/>
+
+    <TextView
+        android:id="@+id/departmentDescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
         android:layout_below="@+id/departmentsSpiner"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="143dp"
-        android:text="TextView"
-        android:textSize="30sp" />
+        android:text="OPIS KATEDRY"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/readMoreTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/departmentDescription"
+        android:text="Czytaj więcej..."
+        android:textSize="18sp" />
 </RelativeLayout>

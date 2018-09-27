@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="pg.pgapp.activities.app.BuildingDetailsActivity">
+
+    <LinearLayout
+        android:id="@+id/center_point"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"/>
+
+    <LinearLayout
+        android:id="@+id/left_layout"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentLeft="true"
+        android:layout_alignRight="@+id/center_point">
+        <ScrollView
+            android:id="@+id/leftScroll"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentStart="true">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+        <ImageView
+        android:id="@+id/buildingImageView"
+        android:layout_width="match_parent"
+        android:layout_height="226dp"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="11dp"
+        app:srcCompat="@drawable/common_full_open_on_phone"
+        tools:layout_editor_absoluteX="65dp"
+        tools:layout_editor_absoluteY="242dp" />
+
+        <TextView
+        android:id="@+id/buildingName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        android:layout_below="@+id/buildingImageView"
+        android:gravity="center_vertical|center_horizontal"
+        android:textSize="18sp"
+        android:visibility="visible"
+        tools:text="In this place should be building name" />
+
+                <TextView
+                    android:id="@+id/buildingFacultyName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:onClick="changeActivity"
+                    android:textColor="@color/colorPgSecondary"
+                    android:textSize="18sp"
+                    android:visibility="visible"
+                    tools:text="In this place should be building faculty name" />
+        <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="TUTAJ ADRES ALBO NAD FACULTY NAME"
+        android:textSize="18sp" />
+            </LinearLayout>
+        </ScrollView>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/right_layout"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignLeft="@+id/center_point">
+
+        <ScrollView
+        android:id="@+id/rightScroll"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true">
+            <TextView
+            android:id="@+id/buildingDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView3"
+            android:layout_marginTop="0dp"
+            android:textSize="18sp"
+            tools:text="In this place should be description" />
+        </ScrollView>
+</LinearLayout>
+</RelativeLayout>
