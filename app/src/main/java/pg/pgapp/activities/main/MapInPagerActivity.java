@@ -1,5 +1,6 @@
 package pg.pgapp.activities.main;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -8,11 +9,15 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+
+import java.io.Console;
 
 import pg.pgapp.R;
 import pg.pgapp.activities.fragments.ARFragment;
 import pg.pgapp.activities.fragments.ETIMapFragment;
 import pg.pgapp.activities.fragments.MainMenuFragment;
+import pg.pgapp.activities.fragments.OptionsActivity;
 
 public class MapInPagerActivity extends AppCompatActivity {
 
@@ -52,6 +57,11 @@ public class MapInPagerActivity extends AppCompatActivity {
 		// This is required to avoid a black flash when the map is loaded.  The flash is due
 		// to the use of a SurfaceView as the underlying view of the map.
 		mPager.requestTransparentRegion(mPager);
+	}
+
+	public void SettingsActivity(View view) {
+		Intent intent = new Intent(this, OptionsActivity.class);
+		startActivity(intent);
 	}
 
 	public static class MyAdapter extends FragmentPagerAdapter {
