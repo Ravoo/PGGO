@@ -1,15 +1,26 @@
 package pg.pgapp.activities.fragments;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -20,12 +31,12 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import pg.pgapp.Initializer;
 import pg.pgapp.R;
 
-public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
+public class ETIMapFragment extends Fragment implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
 	private GoogleMap mMap;
 	private UiSettings mUiSettings;
 	private SharedPreferences preferences;
-
+	private DrawerLayout drawer;
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
 
@@ -50,6 +61,7 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
 		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
 		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
+		initializeDrawer();
 	}
 
 	/**
@@ -99,5 +111,64 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback {
 
 	private boolean isSet(String tag) {
 		return this.preferences.getBoolean(tag, true);
+	}
+
+	private void initializeDrawer()
+	{
+		drawer = getActivity().findViewById(R.id.drawer_layout);
+		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
+		ImageButton button = getActivity().findViewById(R.id.menuImageButton);
+		button.setOnClickListener(new View.OnClickListener()
+		{
+			@Override
+			public void onClick(View v) {
+				DrawerLayout drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+				drawerLayout.openDrawer(GravityCompat.START);
+			}
+		});
+		NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+		navigationView.setNavigationItemSelectedListener(this);
+	}
+
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		// Handle action bar item clicks here. The action bar will
+		// automatically handle clicks on the Home/Up button, so long
+		// as you specify a parent activity in AndroidManifest.xml.
+		int id = item.getItemId();
+
+		//noinspection SimplifiableIfStatement
+		if (id == R.id.nav_search) {
+			return true;
+		}
+
+		return super.onOptionsItemSelected(item);
+	}
+
+	@SuppressWarnings("StatementWithEmptyBody")
+	@Override
+	public boolean onNavigationItemSelected(MenuItem item) {
+		// Handle navigation view item clicks here.
+		int id = item.getItemId();
+
+		if (id == R.id.nav_ar) {
+			Log.i("Info","Akcja AR");
+		}  else if (id == R.id.nav_manage) {
+			Log.i("Info","Akcja Ustawienia");
+			Intent intent = new Intent(getActivity(), OptionsActivity.class);
+			startActivity(intent);
+		}else if(id == R.id.nav_search)
+		{
+			Log.i("Info","Akcj szukaj");
+		}
+
+		drawer.closeDrawer(GravityCompat.START);
+		return true;
+	}
+
+	public void OpenMenu(View view) {
+		DrawerLayout drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+		drawerLayout.openDrawer(GravityCompat.START);
 	}
 }
