@@ -50,7 +50,7 @@ public class Initializer {
         Gson gson = new Gson();
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
         */
-		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays(0L);
+		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays();
 		buildings.forEach(
 				building -> {
 					PolygonOptions buildingOptions = new PolygonOptions()

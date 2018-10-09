@@ -10,5 +10,14 @@ import lombok.NoArgsConstructor;
 public abstract class BaseModel {
 	private long id;
 	private String name;
-	private String tag;
+	private Tag tag;
+
+	public static int getModelColor(Tag tag) {
+		switch (tag) {
+			case ETI:
+				return 0xFF00FF00;
+			default:
+				return 0xFFFFFF00;
+		}
+	}
 }

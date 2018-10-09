@@ -9,7 +9,7 @@ public class Department extends BaseModel {
 	private String description;
 	private long facultyId;
 
-	public Department(long id, String name, String tag, String description, long facultyId) {
+	public Department(long id, String name, Tag tag, String description, long facultyId) {
 		super(id, name, tag);
 		this.description = description;
 		this.facultyId = facultyId;

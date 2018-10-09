@@ -1,32 +1,18 @@
 package pg.pgapp.activities.main;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-
-import java.io.Console;
-
 
 import pg.pgapp.R;
 import pg.pgapp.activities.fragments.ARFragment;
 import pg.pgapp.activities.fragments.ETIMapFragment;
 import pg.pgapp.activities.fragments.MainMenuFragment;
-import pg.pgapp.activities.fragments.OptionsActivity;
 
 public class MapInPagerActivity extends AppCompatActivity {
 
@@ -81,7 +67,6 @@ public class MapInPagerActivity extends AppCompatActivity {
 //		navigationView.setNavigationItemSelectedListener(this);
 
 	}
-
 
 
 	public static class MyAdapter extends FragmentPagerAdapter {

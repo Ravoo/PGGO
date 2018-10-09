@@ -11,15 +11,11 @@ import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -36,9 +32,9 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 	private GoogleMap mMap;
 	private UiSettings mUiSettings;
 	private SharedPreferences preferences;
-	private DrawerLayout drawer;
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
+	private DrawerLayout drawer;
 
 	public static SupportMapFragment newInstance() {
 		Bundle args = new Bundle();
@@ -113,13 +109,11 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 		return this.preferences.getBoolean(tag, true);
 	}
 
-	private void initializeDrawer()
-	{
+	private void initializeDrawer() {
 		drawer = getActivity().findViewById(R.id.drawer_layout);
 		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		ImageButton button = getActivity().findViewById(R.id.menuImageButton);
-		button.setOnClickListener(new View.OnClickListener()
-		{
+		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				DrawerLayout drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
@@ -153,14 +147,15 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 		int id = item.getItemId();
 
 		if (id == R.id.nav_ar) {
-			Log.i("Info","Akcja AR");
-		}  else if (id == R.id.nav_manage) {
-			Log.i("Info","Akcja Ustawienia");
+			Log.i("Info", "Akcja AR");
+		} else if (id == R.id.nav_manage) {
+			Log.i("Info", "Akcja Ustawienia");
 			Intent intent = new Intent(getActivity(), OptionsActivity.class);
 			startActivity(intent);
-		}else if(id == R.id.nav_search)
-		{
-			Log.i("Info","Akcj szukaj");
+		} else if (id == R.id.nav_search) {
+			Log.i("Info", "Akcja szukaj");
+			Intent intent = new Intent(getActivity(), SearchActivity.class);
+			startActivity(intent);
 		}
 
 		drawer.closeDrawer(GravityCompat.START);
