@@ -1,4 +1,4 @@
-package pg.pgapp.activities.fragments;
+package pg.pgapp.activities.activities;
 
 import android.content.Intent;
 import android.os.Bundle;

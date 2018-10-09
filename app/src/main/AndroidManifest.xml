@@ -32,7 +32,7 @@
             android:value="@string/google_maps_key" />
 
         <activity
-            android:name=".activities.main.MapInPagerActivity"
+            android:name=".activities.main.MapActivity"
             android:label="@string/PGGO_app_label">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -42,7 +42,8 @@
         </activity>
         <activity android:name=".activities.app.BuildingDetailsActivity" />
         <activity android:name=".activities.app.FacultyDetailsActivity" />
-        <activity android:name=".activities.fragments.OptionsActivity" />
+        <activity android:name=".activities.activities.OptionsActivity" />
+        <activity android:name=".activities.activities.ARActivity" />
     </application>
 
 </manifest>
