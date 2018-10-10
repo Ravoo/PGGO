@@ -45,7 +45,7 @@
         <activity android:name=".activities.activities.OptionsActivity" />
         <activity android:name=".activities.activities.ARActivity" />
         <activity
-            android:name=".activities.fragments.SearchActivity"
+            android:name=".activities.activities.SearchActivity"
             android:label="@string/title_activity_search"
             android:theme="@style/AppTheme"></activity>
     </application>

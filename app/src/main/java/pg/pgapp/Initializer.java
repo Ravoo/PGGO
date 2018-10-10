@@ -50,22 +50,24 @@ public class Initializer {
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
         */
 		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays();
-		buildings.forEach(
-				building -> {
-					PolygonOptions buildingOptions = new PolygonOptions()
-							.clickable(true)
-							.strokeColor(building.getModelColor())
-							.strokeWidth(2);
+		if (buildings != null) {
+			buildings.forEach(
+					building -> {
+						PolygonOptions buildingOptions = new PolygonOptions()
+								.clickable(true)
+								.strokeColor(building.getModelColor())
+								.strokeWidth(2);
 
-					building.getCoordinates().forEach(coordinate ->
-							buildingOptions.add(new LatLng(coordinate.getLatitude(), coordinate.getLongitude())));
+						building.getCoordinates().forEach(coordinate ->
+								buildingOptions.add(new LatLng(coordinate.getLatitude(), coordinate.getLongitude())));
 
-					Polygon polygon = mMap.addPolygon(buildingOptions);
-					polygon.setClickable(true);
-					polygon.setTag(building.getBuildingId());
-				}
-		);
-		mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));
+						Polygon polygon = mMap.addPolygon(buildingOptions);
+						polygon.setClickable(true);
+						polygon.setTag(building.getBuildingId());
+					}
+			);
+			mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));
+		}
 	}
 
 	private String readDataFromFile(String filename) {
