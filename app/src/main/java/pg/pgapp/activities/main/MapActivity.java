@@ -97,7 +97,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	private void initializeDrawer()
 	{
 		drawer = findViewById(R.id.drawer_layout);
-		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
 		ImageButton button = findViewById(R.id.menuImageButton);
 		button.setOnClickListener(new View.OnClickListener()
 		{
@@ -110,7 +109,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 	}
-
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
