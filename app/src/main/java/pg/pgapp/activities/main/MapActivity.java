@@ -1,21 +1,16 @@
-package pg.pgapp.activities.fragments;
+package pg.pgapp.activities.main;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -26,8 +21,10 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 
 import pg.pgapp.Initializer;
 import pg.pgapp.R;
+import pg.pgapp.activities.activities.ARActivity;
+import pg.pgapp.activities.activities.OptionsActivity;
 
-public class ETIMapFragment extends Fragment implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
 	private GoogleMap mMap;
 	private UiSettings mUiSettings;
@@ -44,35 +41,22 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 	}
 
 	@Override
-	public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-		preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-		preferences.registerOnSharedPreferenceChangeListener(listener);
-		return inflater.inflate(R.layout.activity_maps, null);
-	}
-
-	@Override
-	public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
-		super.onViewCreated(view, savedInstanceState);
-
-		// Obtain the SupportMapFragment and get notified when the map is ready to be used.
-		SupportMapFragment mapFragment = (SupportMapFragment) getChildFragmentManager().findFragmentById(R.id.map);
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_maps);
+		SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
+		this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
+		String newTheme = preferences.getString("text_size", null);
+		setTheme(getNewTheme(newTheme));
+
 		initializeDrawer();
 	}
 
-	/**
-	 * Manipulates the map once available.
-	 * This callback is triggered when the map is ready to be used.
-	 * This is where we can add markers or lines, add listeners or move the camera. In this case,
-	 * we just add a marker near Sydney, Australia.
-	 * If Google Play services is not installed on the device, the user will be prompted to install
-	 * it inside the SupportMapFragment. This method will only be triggered once the user has
-	 * installed Google Play services and returned to the app.
-	 */
 	@Override
 	public void onMapReady(GoogleMap googleMap) {
 		mMap = googleMap;
-		Initializer initializer = new Initializer(getContext());
+		Initializer initializer = new Initializer(this);
 		initializer.initialize(mMap);
 		configureUI();
 	}
@@ -80,19 +64,19 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 	@Override
 	public void onResume() {
 		super.onResume();
-		PreferenceManager.getDefaultSharedPreferences(getContext()).registerOnSharedPreferenceChangeListener(listener);
+		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(listener);
 	}
 
 	@Override
 	public void onPause() {
 		super.onPause();
-		PreferenceManager.getDefaultSharedPreferences(getContext()).unregisterOnSharedPreferenceChangeListener(listener);
+		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(listener);
 	}
 
 	@SuppressLint("MissingPermission")
 	private void configureUI() {
 		if (isSet("night_mode_preference")) {
-			mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.map_night));
+			mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_night));
 		}
 		mUiSettings = mMap.getUiSettings();
 		mUiSettings.setZoomControlsEnabled(isSet("UI_settings_zoom"));
@@ -109,34 +93,30 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 		return this.preferences.getBoolean(tag, true);
 	}
 
-	private void initializeDrawer() {
-		drawer = getActivity().findViewById(R.id.drawer_layout);
-		drawer.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED);
-		ImageButton button = getActivity().findViewById(R.id.menuImageButton);
-		button.setOnClickListener(new View.OnClickListener() {
+	private void initializeDrawer()
+	{
+		drawer = findViewById(R.id.drawer_layout);
+		ImageButton button = findViewById(R.id.menuImageButton);
+		button.setOnClickListener(new View.OnClickListener()
+		{
 			@Override
 			public void onClick(View v) {
-				DrawerLayout drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+				DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 				drawerLayout.openDrawer(GravityCompat.START);
 			}
 		});
-		NavigationView navigationView = (NavigationView) getActivity().findViewById(R.id.nav_view);
+		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 	}
 
-
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		// Handle action bar item clicks here. The action bar will
-		// automatically handle clicks on the Home/Up button, so long
-		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
 
 		//noinspection SimplifiableIfStatement
 		if (id == R.id.nav_search) {
 			return true;
 		}
-
 		return super.onOptionsItemSelected(item);
 	}
 
@@ -147,10 +127,12 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 		int id = item.getItemId();
 
 		if (id == R.id.nav_ar) {
-			Log.i("Info", "Akcja AR");
-		} else if (id == R.id.nav_manage) {
-			Log.i("Info", "Akcja Ustawienia");
-			Intent intent = new Intent(getActivity(), OptionsActivity.class);
+			Log.i("Info","Akcja AR");
+			Intent intent = new Intent(this, ARActivity.class);
+			startActivity(intent);
+		}  else if (id == R.id.nav_manage) {
+			Log.i("Info","Akcja Ustawienia");
+			Intent intent = new Intent(this, OptionsActivity.class);
 			startActivity(intent);
 		} else if (id == R.id.nav_search) {
 			Log.i("Info", "Akcja szukaj");
@@ -163,7 +145,19 @@ public class ETIMapFragment extends Fragment implements OnMapReadyCallback, Navi
 	}
 
 	public void OpenMenu(View view) {
-		DrawerLayout drawerLayout = (DrawerLayout) getActivity().findViewById(R.id.drawer_layout);
+		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerLayout.openDrawer(GravityCompat.START);
+	}
+
+	public static int getNewTheme(String newTheme) {
+		int themeID = R.style.FontSizeMedium;
+		if (newTheme != null) {
+			if (newTheme.equals("small")) {
+				themeID = R.style.FontSizeSmall;
+			} else if (newTheme.equals("large")) {
+				themeID = R.style.FontSizeLarge;
+			}
+		}
+		return themeID;
 	}
 }
