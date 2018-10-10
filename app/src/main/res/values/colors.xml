@@ -6,4 +6,5 @@
     <color name="colorPgPrimary">#04386A</color>
     <color name="colorPgSecondary">#04316c</color>
     <color name="colorWhite">#FFFFFF</color>
+    <color name="hintColor">#b3b3b3</color>
 </resources>

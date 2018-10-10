@@ -3,7 +3,6 @@ package pg.pgapp;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -55,7 +54,7 @@ public class Initializer {
 				building -> {
 					PolygonOptions buildingOptions = new PolygonOptions()
 							.clickable(true)
-							.strokeColor(Color.RED)
+							.strokeColor(building.getModelColor())
 							.strokeWidth(2);
 
 					building.getCoordinates().forEach(coordinate ->
