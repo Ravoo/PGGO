@@ -4,12 +4,14 @@ import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 @AllArgsConstructor
 @Getter
 public class Building extends BaseModel {
 	private List<Long> facultiesIds;
 	private List<String> facultiesNames;
+	@Setter
 	private String picture;
 	private String description;
 
