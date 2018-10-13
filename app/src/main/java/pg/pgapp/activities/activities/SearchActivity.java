@@ -5,9 +5,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.res.ResourcesCompat;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -31,6 +33,7 @@ public class SearchActivity extends ListActivity {
 	ArrayAdapter<SpannableString> adapter;
 	ArrayList<Long> buildingsIds = new ArrayList<>();
 	ArrayList<Long> facultiesIds = new ArrayList<>();
+	ArrayList<Long> departmentsIds = new ArrayList<>();
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
@@ -44,9 +47,9 @@ public class SearchActivity extends ListActivity {
 			public View getView(int position, View convertView, @NonNull ViewGroup parent) {
 				View view = super.getView(position, convertView, parent);
 				if (position % 2 == 1) {
-					view.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
+					view.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPgSecondary, null));
 				} else {
-					view.setBackgroundColor(getResources().getColor(R.color.colorPgPrimary));
+					view.setBackgroundColor(ResourcesCompat.getColor(getResources(), R.color.colorPgPrimary, null));
 				}
 
 				return view;
@@ -57,18 +60,22 @@ public class SearchActivity extends ListActivity {
 
 	@Override
 	protected void onListItemClick(ListView l, View v, int position, long id) {
-		if (position < facultiesIds.size() + buildingsIds.size()) {
-			Context context = getApplicationContext();
+		Context context = getApplicationContext();
 
-			if (position <= buildingsIds.size()) {
-				Intent intent = new Intent(context, BuildingDetailsActivity.class);
-				intent.putExtra("TAG", buildingsIds.get(position).toString());
-				context.startActivity(intent);
-			} else {
-				Intent intent = new Intent(context, FacultyDetailsActivity.class);
+		if (position < buildingsIds.size()) {
+			Intent intent = new Intent(context, BuildingDetailsActivity.class);
+			intent.putExtra("TAG", buildingsIds.get(position).toString());
+			context.startActivity(intent);
+		} else {
+			Intent intent = new Intent(context, FacultyDetailsActivity.class);
+			int departmentOffset = facultiesIds.size() + buildingsIds.size();
+			if (position < departmentOffset) {
 				intent.putExtra("TAG", facultiesIds.get(position - buildingsIds.size()).toString());
-				context.startActivity(intent);
+			} else {
+				Log.v("asd", departmentsIds.get(position - (departmentOffset)).toString());
+				intent.putExtra("TAG", departmentsIds.get(position - (departmentOffset)).toString());
 			}
+			context.startActivity(intent);
 		}
 	}
 
@@ -90,6 +97,7 @@ public class SearchActivity extends ListActivity {
 			adapter.add(getColorfulString(faculty, faculty.getTag(), faculty.getName()));
 		});
 		departments.forEach(department -> {
+			departmentsIds.add(department.getFacultyId());
 			adapter.add(getColorfulString(department, department.getTag(), department.getName()));
 		});
 	}

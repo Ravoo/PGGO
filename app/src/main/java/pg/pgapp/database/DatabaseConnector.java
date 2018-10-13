@@ -12,6 +12,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
@@ -29,6 +30,7 @@ public class DatabaseConnector {
 	private static String URL = "http://192.168.0.104:8080/";
 	private static String BUILDING_PATH = "building/";
 	private static String BUILDING_DISPLAY_PATH = "building/display/";
+	private static String BUILDING_PICTURE_PATH = "building/picture/";
 	private static String FACULTY_PATH = "faculty/";
 	private static String DEPARTMENT_PATH = "department/";
 
@@ -158,6 +160,17 @@ public class DatabaseConnector {
 
 	public Building getBuildingModel(Long id) {
 		return (Building) getModel(id, ModelType.BUILDING);
+	}
+
+	public String getBuildingPicture(Long id) {
+		ExecutorService executorService = Executors.newSingleThreadExecutor();
+		Future<String> result = executorService.submit(() -> getModel(BUILDING_PICTURE_PATH, id));
+		try {
+			return result.get();
+		} catch (InterruptedException | ExecutionException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public Faculty getFacultyModel(Long id) {
