@@ -16,14 +16,10 @@ public abstract class BaseModel {
 		switch (this.tag) {
 			case ETI:
 				return 0xFF0033cc;
-			case ARCH:
-				return 0xFFcc0066;
 			case CHEM:
 				return 0xFF009933;
 			case EIA:
 				return 0xFFcc00cc;
-			case FTIMS:
-				return 0xFF00cc99;
 			case ILIS:
 				return 0xFFff9933;
 			case MECH:
