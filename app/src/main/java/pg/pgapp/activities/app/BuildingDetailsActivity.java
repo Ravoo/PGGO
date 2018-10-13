@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import java.util.Locale;
@@ -22,7 +23,7 @@ import pg.pgapp.models.Building;
 
 public class BuildingDetailsActivity extends AppCompatActivity {
 
-	Building building; //do change activity
+	Building building;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 	}
 
 	public void initializeDetailView() {
+		ImageView imageView = findViewById(R.id.buildingImageView);
+		imageView.setVisibility(View.GONE);
 		TextView buildingNameTextView = findViewById(R.id.buildingName);
 		TextView buildingFacultyTextView = findViewById(R.id.buildingFacultyName);
 		//TextView buildingDescription = findViewById(R.id.buildingDescription);
@@ -74,6 +77,10 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 		byte[] decodedString = Base64.decode(building.getPicture(), Base64.DEFAULT);
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		imageView.setImageBitmap(decodedByte);
+		imageView.setVisibility(View.VISIBLE);
+		ProgressBar progressBar = findViewById(R.id.progressBar1);
+		progressBar.setVisibility(View.GONE);
+
 	}
 
 	private class PictureDownloader extends AsyncTask<Void, Void, String> {
@@ -86,14 +93,6 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 		@Override
 		protected String doInBackground(Void... voids) {
 			return new DatabaseConnector().getBuildingPicture(building.getId());
-		}
-
-		@Override
-		protected void onPreExecute() {
-		}
-
-		@Override
-		protected void onProgressUpdate(Void... values) {
 		}
 	}
 }

@@ -15,10 +15,12 @@ import java.util.ArrayList;
 
 import pg.pgapp.R;
 import pg.pgapp.database.DatabaseConnector;
+import pg.pgapp.models.Department;
 import pg.pgapp.models.Faculty;
 
 public class FacultyDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-
+	Faculty faculty;
+	Department department;
 	Spinner spinner;
 
 	@Override
@@ -36,12 +38,13 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 		readMoreTextView.setClickable(true);
 		readMoreTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		String text = "<a href='https://eti.pg.edu.pl/katedra-inteligentnych-systemow-interaktywnych/o-katedrze'> Czytaj więcej... </a>";
+		//String text = "<a href='" + department.getPageUrl() + "'> Czytaj więcej... </a>";
 		readMoreTextView.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
 
 		Intent intent = getIntent();
-		Long tag = intent.getLongExtra("TAG", 2);
+		String tag = intent.getStringExtra("TAG");
 
-		Faculty faculty = new DatabaseConnector().getFacultyModel(tag);
+		faculty = new DatabaseConnector().getFacultyModel(Long.parseLong(tag));
 		facultyNameTextView.setText(faculty.getName());
 
 
@@ -56,7 +59,9 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 		TextView departmentDescriptionTextView = findViewById(R.id.departmentDescription);
 		//TextView selectedTV = findViewById(R.id.selectedTextView);
 		//selectedTV.setText(spinner.getItemAtPosition(position).toString());
-		departmentDescriptionTextView.setText("Katedra Inteligentnych Systemów Interaktywnych jest jednym z pięciu filarów kierunku Informatyka na Wydziale Elektroniki, Telekomunikacji i Informatyki i działa w obecnie najszybciej rozwijających się obszarach technologii informacyjnych, stanowiących zręby rodzącego się społeczeństwa informacyjnego XXI wieku: interaktywnych i wielopostaciowych dokumentów cyfrowych, wirtualnych zespołów roboczych, inteligentnego gromadzenia i wyszukiwania informacji, widzenia komputerowego oraz wizualizacji informacji i zjawisk. ");
+		department = new DatabaseConnector().getDepartmentModel(faculty.getDepartmentsIds().get(position));
+
+		departmentDescriptionTextView.setText(department.getDescription());
 	}
 
 	@Override
