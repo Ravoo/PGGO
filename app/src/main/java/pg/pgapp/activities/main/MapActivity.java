@@ -24,15 +24,16 @@ import pg.pgapp.Initializer;
 import pg.pgapp.R;
 import pg.pgapp.activities.activities.ARActivity;
 import pg.pgapp.activities.activities.OptionsActivity;
+import pg.pgapp.activities.activities.SearchActivity;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
 	private GoogleMap mMap;
 	private UiSettings mUiSettings;
 	private SharedPreferences preferences;
-	private DrawerLayout drawer;
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
+	private DrawerLayout drawer;
 
 	public static SupportMapFragment newInstance() {
 		Bundle args = new Bundle();
@@ -41,11 +42,23 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		return fragment;
 	}
 
+	public static int getNewTheme(String newTheme) {
+		int themeID = R.style.FontSizeMedium;
+		if (newTheme != null) {
+			if (newTheme.equals("small")) {
+				themeID = R.style.FontSizeSmall;
+			} else if (newTheme.equals("large")) {
+				themeID = R.style.FontSizeLarge;
+			}
+		}
+		return themeID;
+	}
+
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_maps);
-		SupportMapFragment mapFragment = (SupportMapFragment)getSupportFragmentManager().findFragmentById(R.id.map);
+		SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
 		mapFragment.getMapAsync(this);
 		this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String newTheme = preferences.getString("text_size", null);
@@ -94,12 +107,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		return this.preferences.getBoolean(tag, true);
 	}
 
-	private void initializeDrawer()
-	{
+	private void initializeDrawer() {
 		drawer = findViewById(R.id.drawer_layout);
 		ImageButton button = findViewById(R.id.menuImageButton);
-		button.setOnClickListener(new View.OnClickListener()
-		{
+		button.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
 				DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -128,16 +139,17 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		int id = item.getItemId();
 
 		if (id == R.id.nav_ar) {
-			Log.i("Info","Akcja AR");
+			Log.i("Info", "Akcja AR");
 			Intent intent = new Intent(this, ARActivity.class);
 			startActivity(intent);
-		}  else if (id == R.id.nav_manage) {
-			Log.i("Info","Akcja Ustawienia");
+		} else if (id == R.id.nav_manage) {
+			Log.i("Info", "Akcja Ustawienia");
 			Intent intent = new Intent(this, OptionsActivity.class);
 			startActivity(intent);
-		}else if(id == R.id.nav_search)
-		{
-			Log.i("Info","Akcj szukaj");
+		} else if (id == R.id.nav_search) {
+			Log.i("Info", "Akcja szukaj");
+			Intent intent = new Intent(this, SearchActivity.class);
+			startActivity(intent);
 		}
 
 		drawer.closeDrawer(GravityCompat.START);
@@ -147,17 +159,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	public void OpenMenu(View view) {
 		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
 		drawerLayout.openDrawer(GravityCompat.START);
-	}
-
-	public static int getNewTheme(String newTheme) {
-		int themeID = R.style.FontSizeMedium;
-		if (newTheme != null) {
-			if (newTheme.equals("small")) {
-				themeID = R.style.FontSizeSmall;
-			} else if (newTheme.equals("large")) {
-				themeID = R.style.FontSizeLarge;
-			}
-		}
-		return themeID;
 	}
 }

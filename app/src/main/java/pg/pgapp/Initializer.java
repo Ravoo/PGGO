@@ -3,7 +3,6 @@ package pg.pgapp;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
 import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -50,23 +49,25 @@ public class Initializer {
         Gson gson = new Gson();
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
         */
-		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays(0L);
-		buildings.forEach(
-				building -> {
-					PolygonOptions buildingOptions = new PolygonOptions()
-							.clickable(true)
-							.strokeColor(Color.RED)
-							.strokeWidth(2);
+		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays();
+		if (buildings != null) {
+			buildings.forEach(
+					building -> {
+						PolygonOptions buildingOptions = new PolygonOptions()
+								.clickable(true)
+								.strokeColor(building.getModelColor())
+								.strokeWidth(2);
 
-					building.getCoordinates().forEach(coordinate ->
-							buildingOptions.add(new LatLng(coordinate.getLatitude(), coordinate.getLongitude())));
+						building.getCoordinates().forEach(coordinate ->
+								buildingOptions.add(new LatLng(coordinate.getLatitude(), coordinate.getLongitude())));
 
-					Polygon polygon = mMap.addPolygon(buildingOptions);
-					polygon.setClickable(true);
-					polygon.setTag(building.getBuildingId());
-				}
-		);
-		mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));
+						Polygon polygon = mMap.addPolygon(buildingOptions);
+						polygon.setClickable(true);
+						polygon.setTag(building.getBuildingId());
+					}
+			);
+			mMap.setOnPolygonClickListener(new OnPolygonClickListener(context));
+		}
 	}
 
 	private String readDataFromFile(String filename) {

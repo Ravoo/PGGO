@@ -10,7 +10,7 @@ import lombok.Getter;
 public class Faculty extends BaseModel {
 	private List<String> departmentsNames;
 
-	public Faculty(long id, String name, String tag, List<String> departmentsNames) {
+	public Faculty(long id, String name, Tag tag, List<String> departmentsNames) {
 		super(id, name, tag);
 		this.departmentsNames = departmentsNames;
 	}

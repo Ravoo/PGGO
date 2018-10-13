@@ -21,11 +21,12 @@ import pg.pgapp.models.Building;
 import pg.pgapp.models.BuildingDisplay;
 import pg.pgapp.models.Department;
 import pg.pgapp.models.Faculty;
+import pg.pgapp.models.ModelType;
 
 public class DatabaseConnector {
 
 	// todo change to server ip:port
-	private static String URL = "http://192.168.137.1:8080/";
+	private static String URL = "http://192.168.0.104:8080/";
 	private static String BUILDING_PATH = "building/";
 	private static String BUILDING_DISPLAY_PATH = "building/display/";
 	private static String FACULTY_PATH = "faculty/";
@@ -37,11 +38,28 @@ public class DatabaseConnector {
 		HttpURLConnection urlConnection;
 		String serverResponse = "";
 		try {
-			if (id == 0) {
-				url = new URL(URL + path);
-			} else {
-				url = new URL(URL + path + id);
+			url = new URL(URL + path + id);
+			urlConnection = (HttpURLConnection) url.openConnection();
+
+			int responseCode = urlConnection.getResponseCode();
+
+			if (responseCode == HttpURLConnection.HTTP_OK) {
+				serverResponse = readStream(urlConnection.getInputStream());
+				Log.v("GET returned", serverResponse);
 			}
+
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return serverResponse;
+	}
+
+	private String getModels(String path, String name) {
+		URL url;
+		HttpURLConnection urlConnection;
+		String serverResponse = "";
+		try {
+			url = new URL(URL + path + "?name=" + name);
 			urlConnection = (HttpURLConnection) url.openConnection();
 
 			int responseCode = urlConnection.getResponseCode();
@@ -92,23 +110,23 @@ public class DatabaseConnector {
 		return new Gson().fromJson(getModel(DEPARTMENT_PATH, id), Department.class);
 	}
 
-	private ArrayList<Building> getDatabaseBuildingDisplaysModels(Long id) {
-		return new Gson().fromJson(getModel(BUILDING_DISPLAY_PATH, id), new TypeToken<ArrayList<BuildingDisplay>>() {
+	private ArrayList<Building> getDatabaseBuildingDisplaysModels(String name) {
+		return new Gson().fromJson(getModels(BUILDING_DISPLAY_PATH, name), new TypeToken<ArrayList<BuildingDisplay>>() {
 		}.getType());
 	}
 
-	private ArrayList<Building> getDatabaseBuildingModels(Long id) {
-		return new Gson().fromJson(getModel(BUILDING_PATH, id), new TypeToken<ArrayList<Building>>() {
+	private ArrayList<Building> getDatabaseBuildingModels(String name) {
+		return new Gson().fromJson(getModels(BUILDING_PATH, name), new TypeToken<ArrayList<Building>>() {
 		}.getType());
 	}
 
-	private ArrayList<Faculty> getDatabaseFacultyModels(Long id) {
-		return new Gson().fromJson(getModel(FACULTY_PATH, id), new TypeToken<ArrayList<Faculty>>() {
+	private ArrayList<Faculty> getDatabaseFacultyModels(String name) {
+		return new Gson().fromJson(getModels(FACULTY_PATH, name), new TypeToken<ArrayList<Faculty>>() {
 		}.getType());
 	}
 
-	private ArrayList<Department> getDatabaseDepartmentModels(Long id) {
-		return new Gson().fromJson(getModel(DEPARTMENT_PATH, id), new TypeToken<ArrayList<Department>>() {
+	private ArrayList<Department> getDatabaseDepartmentModels(String name) {
+		return new Gson().fromJson(getModels(DEPARTMENT_PATH, name), new TypeToken<ArrayList<Department>>() {
 		}.getType());
 	}
 
@@ -150,18 +168,18 @@ public class DatabaseConnector {
 		return (Department) getModel(id, ModelType.DEPARTMENT);
 	}
 
-	private ArrayList<? extends BaseModel> getModels(Long id, ModelType modelType) {
+	private ArrayList<? extends BaseModel> getModels(String name, ModelType modelType) {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		Future<ArrayList<? extends BaseModel>> result = executorService.submit(() -> {
 			switch (modelType) {
 				case BUILDING_DISPLAY:
-					return getDatabaseBuildingDisplaysModels(id);
+					return getDatabaseBuildingDisplaysModels(name);
 				case BUILDING:
-					return getDatabaseBuildingModels(id);
+					return getDatabaseBuildingModels(name);
 				case FACULTY:
-					return getDatabaseFacultyModels(id);
+					return getDatabaseFacultyModels(name);
 				case DEPARTMENT:
-					return getDatabaseDepartmentModels(id);
+					return getDatabaseDepartmentModels(name);
 				default:
 					return null;
 			}
@@ -178,19 +196,19 @@ public class DatabaseConnector {
 		return model;
 	}
 
-	public ArrayList<BuildingDisplay> getBuildingDisplays(Long id) {
-		return (ArrayList<BuildingDisplay>) getModels(id, ModelType.BUILDING_DISPLAY);
+	public ArrayList<BuildingDisplay> getBuildingDisplays() {
+		return (ArrayList<BuildingDisplay>) getModels("", ModelType.BUILDING_DISPLAY);
 	}
 
-	public ArrayList<Building> getBuildingModels(Long id) {
-		return (ArrayList<Building>) getModels(id, ModelType.BUILDING);
+	public ArrayList<Building> getBuildingModels(String name) {
+		return (ArrayList<Building>) getModels(name, ModelType.BUILDING);
 	}
 
-	public ArrayList<Faculty> getFacultyModels(Long id) {
-		return (ArrayList<Faculty>) getModels(id, ModelType.FACULTY);
+	public ArrayList<Faculty> getFacultyModels(String name) {
+		return (ArrayList<Faculty>) getModels(name, ModelType.FACULTY);
 	}
 
-	public ArrayList<Department> getDepartmentModels(Long id) {
-		return (ArrayList<Department>) getModels(id, ModelType.DEPARTMENT);
+	public ArrayList<Department> getDepartmentModels(String name) {
+		return (ArrayList<Department>) getModels(name, ModelType.DEPARTMENT);
 	}
 }

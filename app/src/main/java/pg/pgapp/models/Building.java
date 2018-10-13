@@ -13,7 +13,7 @@ public class Building extends BaseModel {
 	private String picture;
 	private String description;
 
-	public Building(long id, String name, String tag, List<Long> facultiesIds, List<String> facultiesNames, String picture, String description) {
+	public Building(long id, String name, Tag tag, List<Long> facultiesIds, List<String> facultiesNames, String picture, String description) {
 		super(id, name, tag);
 		this.facultiesIds = facultiesIds;
 		this.facultiesNames = facultiesNames;

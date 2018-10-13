@@ -3,7 +3,6 @@ package pg.pgapp.activities.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,10 +21,8 @@ public class MainMenuFragment extends Fragment implements View.OnClickListener {
 
 	@Override
 	public void onClick(View v) {
-		Log.v("onclick", "Weszlismy");
 		switch (v.getId()) {
 			case R.id.runOptionsButton:
-				Log.v("OPCJE", "Weszlismy");
 				Intent intent = new Intent(getActivity(), OptionsActivity.class);
 				startActivity(intent);
 				break;

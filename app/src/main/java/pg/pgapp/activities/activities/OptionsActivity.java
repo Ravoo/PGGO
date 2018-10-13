@@ -57,6 +57,25 @@ public class OptionsActivity extends AppCompatActivity {
 
 	public static class OptionsFragment extends PreferenceFragmentCompat {
 		PreferenceManager preferenceManager;
+		private Preference.OnPreferenceChangeListener reloadActivityListener = (preference, newValue) -> {
+			// TODO moze da sie to jakos bardziej elegancko "przeladowac"
+			getActivity().finish();
+			getActivity().startActivity(getActivity().getIntent());
+			return true;
+		};
+		private Preference.OnPreferenceChangeListener printInfoListener = (preference, newValue) -> {
+			Log.d("PGGO", "Pref " + preference.getKey() + " changed to " + newValue.toString());
+			return true;
+		};
+		private Preference.OnPreferenceChangeListener nightModeListener = (preference, newValue) -> {
+			UiModeManager uiManager = (UiModeManager) getActivity().getSystemService(Context.UI_MODE_SERVICE);
+			if ((boolean) newValue) {
+				uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
+			} else {
+				uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
+			}
+			return true;
+		};
 
 		@Override
 		public void onCreatePreferences(Bundle savedInstanceState, String rootKey) {
@@ -70,27 +89,5 @@ public class OptionsActivity extends AppCompatActivity {
 			final ListPreference textSize = (ListPreference) preferenceManager.findPreference("text_size");
 			textSize.setOnPreferenceChangeListener(reloadActivityListener);
 		}
-
-		private Preference.OnPreferenceChangeListener reloadActivityListener = (preference, newValue) -> {
-			// TODO moze da sie to jakos bardziej elegancko "przeladowac"
-			getActivity().finish();
-			getActivity().startActivity(getActivity().getIntent());
-			return true;
-		};
-
-		private Preference.OnPreferenceChangeListener printInfoListener = (preference, newValue) -> {
-			Log.d("PGGO", "Pref " + preference.getKey() + " changed to " + newValue.toString());
-			return true;
-		};
-
-		private Preference.OnPreferenceChangeListener nightModeListener = (preference, newValue) -> {
-			UiModeManager uiManager = (UiModeManager) getActivity().getSystemService(Context.UI_MODE_SERVICE);
-			if ((boolean) newValue) {
-				uiManager.setNightMode(UiModeManager.MODE_NIGHT_YES);
-			} else {
-				uiManager.setNightMode(UiModeManager.MODE_NIGHT_NO);
-			}
-			return true;
-		};
 	}
 }
