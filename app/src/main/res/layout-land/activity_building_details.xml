@@ -17,6 +17,7 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/colorPgSecondary"
         android:layout_alignParentLeft="true"
         android:layout_alignRight="@+id/center_point">
         <ScrollView
@@ -27,7 +28,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="@color/colorPgSecondary"
                 android:orientation="vertical">
+                <ProgressBar
+                    android:id="@+id/progressBar1"
+                    android:layout_width="match_parent"
+                    android:layout_height="237dp" />
         <ImageView
         android:id="@+id/buildingImageView"
         android:layout_width="match_parent"
@@ -60,12 +66,14 @@
                     android:textSize="18sp"
                     android:visibility="visible"
                     tools:text="In this place should be building faculty name" />
-        <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="TUTAJ ADRES ALBO NAD FACULTY NAME"
-        android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/buildingAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:text="TUTAJ ADRES ALBO NAD FACULTY NAME"
+                    android:textSize="18sp" />
             </LinearLayout>
         </ScrollView>
     </LinearLayout>
@@ -84,15 +92,11 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_alignParentStart="true">
-            <TextView
-            android:id="@+id/buildingDescription"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignParentStart="true"
-            android:layout_below="@+id/textView3"
-            android:layout_marginTop="0dp"
-            android:textSize="18sp"
-            tools:text="In this place should be description" />
+
+            <WebView
+                android:id="@+id/buildingDescription"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
         </ScrollView>
 </LinearLayout>
 </RelativeLayout>

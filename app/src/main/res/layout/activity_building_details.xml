@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/colorPgSecondary"
     tools:context="pg.pgapp.activities.app.BuildingDetailsActivity">
 
     <ScrollView
@@ -17,6 +18,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@color/colorPgSecondary"
             android:orientation="vertical">
 
             <ProgressBar
@@ -53,6 +55,14 @@
                 tools:text="In this place should be building name" />
 
             <TextView
+                android:id="@+id/buildingAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical|center_horizontal"
+                android:text="Narutowicza 11/12, 80-233 Gdańsk"
+                android:textSize="18sp" />
+
+            <TextView
                 android:id="@+id/buildingFacultyName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -66,13 +76,6 @@
                 android:visibility="visible"
                 tools:text="In this place should be building faculty name" />
 
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_vertical|center_horizontal"
-                android:text="TUTAJ ADRES ALBO NAD FACULTY NAME"
-                android:textSize="18sp" />
 
             <!--<TextView-->
             <!--android:id="@+id/buildingDescription"-->
@@ -92,9 +95,9 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="#123456"
+                android:background="@color/colorPgPrimary"
                 android:gravity="center_vertical|center_horizontal"
-                android:text="JAKAS STOPKA"
+                android:text="PG GO © "
                 android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
