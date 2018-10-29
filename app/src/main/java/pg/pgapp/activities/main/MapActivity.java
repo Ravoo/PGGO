@@ -1,11 +1,14 @@
 package pg.pgapp.activities.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -34,6 +37,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
 	private DrawerLayout drawer;
+
+	private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
+	private boolean locationPermissionGranted = false;
 
 	public static SupportMapFragment newInstance() {
 		Bundle args = new Bundle();
@@ -64,6 +70,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		String newTheme = preferences.getString("text_size", null);
 		setTheme(getNewTheme(newTheme));
 
+        checkPermissions();
+
 		initializeDrawer();
 	}
 
@@ -87,7 +95,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		PreferenceManager.getDefaultSharedPreferences(this).unregisterOnSharedPreferenceChangeListener(listener);
 	}
 
-	@SuppressLint("MissingPermission")
+    @SuppressLint("MissingPermission")
 	private void configureUI() {
 		if (isSet("night_mode_preference")) {
 			mMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(this, R.raw.map_night));
@@ -96,11 +104,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mUiSettings.setZoomControlsEnabled(isSet("UI_settings_zoom"));
 		mUiSettings.setCompassEnabled(isSet("UI_settings_compass"));
 		mUiSettings.setMyLocationButtonEnabled(isSet("UI_settings_my_location"));
-		mMap.setMyLocationEnabled(isSet("UI_settings_my_location"));
 		mUiSettings.setScrollGesturesEnabled(isSet("gesture_setting_scroll") && isSet("general_gesture_settings"));
 		mUiSettings.setZoomGesturesEnabled(isSet("gesture_setting_zoom") && isSet("general_gesture_settings"));
 		mUiSettings.setTiltGesturesEnabled(isSet("gesture_setting_tilt") && isSet("general_gesture_settings"));
 		mUiSettings.setRotateGesturesEnabled(isSet("gesture_setting_rotate") && isSet("general_gesture_settings"));
+
+		mMap.setMyLocationEnabled(locationPermissionGranted);
 	}
 
 	private boolean isSet(String tag) {
@@ -110,14 +119,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	private void initializeDrawer() {
 		drawer = findViewById(R.id.drawer_layout);
 		ImageButton button = findViewById(R.id.menuImageButton);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-				drawerLayout.openDrawer(GravityCompat.START);
-			}
-		});
-		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+		button.setOnClickListener(v -> {
+            DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
+            drawerLayout.openDrawer(GravityCompat.START);
+        });
+		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 	}
 
@@ -156,8 +162,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		return true;
 	}
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
+                // If request is cancelled, the result arrays are empty.
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    locationPermissionGranted = true;
+                } else {
+                    locationPermissionGranted = false;
+                }
+                return;
+            }
+        }
+    }
+
 	public void OpenMenu(View view) {
-		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 		drawerLayout.openDrawer(GravityCompat.START);
+	}
+
+	private void checkPermissions() {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+				&& ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+		} else {
+            locationPermissionGranted = true;
+		}
 	}
 }
