@@ -1,6 +1,9 @@
 package pg.pgapp;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -27,6 +30,12 @@ public class Initializer {
 	public void initialize(@NonNull final GoogleMap mMap) {
 
 		setBuildingsOnMap(mMap);
+
+		//pobranie mojej lokalizacji
+		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+				&& ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			mMap.setMyLocationEnabled(true);
+		}
 
 		LatLng noweEti = new LatLng(54.371648, 18.612357);
 		mMap.moveCamera(CameraUpdateFactory.newLatLng(noweEti)); //TODO: domyślnie będzie move to my location
