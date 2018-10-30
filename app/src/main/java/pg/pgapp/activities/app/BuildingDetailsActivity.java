@@ -25,26 +25,41 @@ import pg.pgapp.models.Building;
 public class BuildingDetailsActivity extends AppCompatActivity {
 
 	Building building;
-
-	@Override
+    ImageView imageView;
+    TextView buildingNameTextView;
+    TextView buildingFacultyTextView;
+    TextView buildingAddressTextView;
+    WebView buildingDescription;
+    byte[] serializedPicture;
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+
 		setContentView(R.layout.activity_building_details);
-
-		initializeDetailView();
+		initializeDetailView(savedInstanceState);
 	}
-
-	public void initializeDetailView() {
-		ImageView imageView = findViewById(R.id.buildingImageView);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putByteArray("pic",serializedPicture);
+    }
+	public void initializeDetailView(Bundle savedInstanceState) {
+        imageView = findViewById(R.id.buildingImageView);
 		imageView.setVisibility(View.GONE);
-		TextView buildingNameTextView = findViewById(R.id.buildingName);
+
+		buildingNameTextView = findViewById(R.id.buildingName);
 		buildingNameTextView.setTextColor(Color.WHITE);
-		TextView buildingFacultyTextView = findViewById(R.id.buildingFacultyName);
+
+		buildingFacultyTextView = findViewById(R.id.buildingFacultyName);
 		buildingFacultyTextView.setTextColor(Color.WHITE);
-		TextView buildingAddressTextView = findViewById(R.id.buildingAddress);
+
+		buildingAddressTextView = findViewById(R.id.buildingAddress);
 		buildingAddressTextView.setTextColor(Color.WHITE);
-		WebView buildingDescription = findViewById(R.id.buildingDescription);
+
+		buildingDescription = findViewById(R.id.buildingDescription);
 		buildingDescription.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
+
 		Intent intent = getIntent();
 		String tag = intent.getStringExtra("TAG");
 
@@ -57,27 +72,40 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 					.append(facultyName)
 					.append("\n");
 		}
-		//buildingFacultyTextView.setText(facultiesNames.toString());
-		buildingFacultyTextView.setText("Wydział elektroniki, telekomunikacji i informatyki (ETI)");
-		//buildingDescription.setText(building.getDescription());
+		buildingFacultyTextView.setText(facultiesNames.toString());
+
 		String justifyTag = "<html><body style='text-align:justify;color:#FFFFFF'>%s</body></html>";
-		String dataString = String.format(Locale.US, justifyTag, "Największy z wydziałów Politechniki Gdańskiej. Składa się z 16 katedr zatrudniających blisko 200 pracowników naukowo-dydaktycznych i naukowych, w tym trzech członków korespondentów Polskiej Akademii Nauk. Na Wydziale kształci się około 4 000 studentów na kierunkach: informatyka, elektronika i telekomunikacja, inżynieria biomedyczna, automatyka i robotyka oraz inżynieria danych, na studiach I i II stopnia oraz studiach doktoranckich." +
-		"ydział należy do najlepszych jednostek akademickich w Polsce, od roku 1992 utrzymuje kategorię naukową A. Działalność naukowa Wydziału obejmuje szeroki zakres nowoczesnych technologii informacyjnych i komunikacyjnych. Wydział ma pełne prawa akademickie w dyscyplinach: informatyka, elektronika i telekomunikacja, a ponadto prawa doktoryzowania w dyscyplinach: biocybernetyka i inżynieria biomedyczna oraz automatyka i robotyka. W 2017 uzyskał akredytację w najwyższej kategorii A+, nadaną przez Komitet Ewaluacji Jednostek Naukowych");
+		String dataString = String.format(Locale.US, justifyTag, building.getDescription());
 		buildingDescription.loadDataWithBaseURL("", dataString, "text/html", "UTF-8", "");
 
-		new PictureDownloader().execute();
+
+
+		if(savedInstanceState != null) {
+            byte[] pic = savedInstanceState.getByteArray("pic");
+            serializedPicture = pic;
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(pic, 0, pic.length);
+            imageView.setImageBitmap(decodedByte);
+            imageView.setVisibility(View.VISIBLE);
+            ProgressBar progressBar = findViewById(R.id.progressBar1);
+            progressBar.setVisibility(View.GONE);
+        }else
+        {
+            new PictureDownloader().execute();
+        }
+
 	}
 
 	public void changeActivity(View view) {
 		Intent intent = new Intent(this, FacultyDetailsActivity.class);
-		intent.putExtra("TAG", building.getFacultiesIds().get(0));
+		intent.putExtra("TAG", building.getFacultiesIds().get(0).toString());
 		startActivity(intent);
 	}
 
 	public void setPicture(String picture) {
-		ImageView imageView = findViewById(R.id.buildingImageView);
+		imageView = findViewById(R.id.buildingImageView);
 		building.setPicture(picture);
 		byte[] decodedString = Base64.decode(building.getPicture(), Base64.DEFAULT);
+        serializedPicture = decodedString;
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		imageView.setImageBitmap(decodedByte);
 		imageView.setVisibility(View.VISIBLE);
