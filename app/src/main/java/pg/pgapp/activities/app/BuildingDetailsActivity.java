@@ -3,6 +3,7 @@ package pg.pgapp.activities.app;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -24,22 +25,41 @@ import pg.pgapp.models.Building;
 public class BuildingDetailsActivity extends AppCompatActivity {
 
 	Building building;
-
-	@Override
+    ImageView imageView;
+    TextView buildingNameTextView;
+    TextView buildingFacultyTextView;
+    TextView buildingAddressTextView;
+    WebView buildingDescription;
+    byte[] serializedPicture;
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+
+
 		setContentView(R.layout.activity_building_details);
-
-		initializeDetailView();
+		initializeDetailView(savedInstanceState);
 	}
-
-	public void initializeDetailView() {
-		ImageView imageView = findViewById(R.id.buildingImageView);
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putByteArray("pic",serializedPicture);
+    }
+	public void initializeDetailView(Bundle savedInstanceState) {
+        imageView = findViewById(R.id.buildingImageView);
 		imageView.setVisibility(View.GONE);
-		TextView buildingNameTextView = findViewById(R.id.buildingName);
-		TextView buildingFacultyTextView = findViewById(R.id.buildingFacultyName);
-		//TextView buildingDescription = findViewById(R.id.buildingDescription);
-		WebView buildingDescription = findViewById(R.id.buildingDescription);
+
+		buildingNameTextView = findViewById(R.id.buildingName);
+		buildingNameTextView.setTextColor(Color.WHITE);
+
+		buildingFacultyTextView = findViewById(R.id.buildingFacultyName);
+		buildingFacultyTextView.setTextColor(Color.WHITE);
+
+		buildingAddressTextView = findViewById(R.id.buildingAddress);
+		buildingAddressTextView.setTextColor(Color.WHITE);
+
+		buildingDescription = findViewById(R.id.buildingDescription);
+		buildingDescription.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
+
 		Intent intent = getIntent();
 		String tag = intent.getStringExtra("TAG");
 
@@ -52,29 +72,40 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 					.append(facultyName)
 					.append("\n");
 		}
-		//buildingFacultyTextView.setText(facultiesNames.toString());
-		buildingFacultyTextView.setText("Wydział elektroniki, telekomunikacji i informatyki (ETI)");
-		//buildingDescription.setText(building.getDescription());
-		String justifyTag = "<html><body style='text-align:justify;'>%s</body></html>";
-		String dataString = String.format(Locale.US, justifyTag, "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
-				"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?");
+		buildingFacultyTextView.setText(facultiesNames.toString());
+
+		String justifyTag = "<html><body style='text-align:justify;color:#FFFFFF'>%s</body></html>";
+		String dataString = String.format(Locale.US, justifyTag, building.getDescription());
 		buildingDescription.loadDataWithBaseURL("", dataString, "text/html", "UTF-8", "");
 
-		//buildingDescription.setText("Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum" +
-		//		"Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia consequuntur magni dolores eos qui ratione voluptatem sequi nesciunt. Neque porro quisquam est, qui dolorem ipsum quia dolor sit amet, consectetur, adipisci velit, sed quia non numquam eius modi tempora incidunt ut labore et dolore magnam aliquam quaerat voluptatem. Ut enim ad minima veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur? Quis autem vel eum iure reprehenderit qui in ea voluptate velit esse quam nihil molestiae consequatur, vel illum qui dolorem eum fugiat quo voluptas nulla pariatur?\"");
-		new PictureDownloader().execute();
+
+
+		if(savedInstanceState != null) {
+            byte[] pic = savedInstanceState.getByteArray("pic");
+            serializedPicture = pic;
+            Bitmap decodedByte = BitmapFactory.decodeByteArray(pic, 0, pic.length);
+            imageView.setImageBitmap(decodedByte);
+            imageView.setVisibility(View.VISIBLE);
+            ProgressBar progressBar = findViewById(R.id.progressBar1);
+            progressBar.setVisibility(View.GONE);
+        }else
+        {
+            new PictureDownloader().execute();
+        }
+
 	}
 
 	public void changeActivity(View view) {
 		Intent intent = new Intent(this, FacultyDetailsActivity.class);
-		intent.putExtra("TAG", building.getFacultiesIds().get(0));
+		intent.putExtra("TAG", building.getFacultiesIds().get(0).toString());
 		startActivity(intent);
 	}
 
 	public void setPicture(String picture) {
-		ImageView imageView = findViewById(R.id.buildingImageView);
+		imageView = findViewById(R.id.buildingImageView);
 		building.setPicture(picture);
 		byte[] decodedString = Base64.decode(building.getPicture(), Base64.DEFAULT);
+        serializedPicture = decodedString;
 		Bitmap decodedByte = BitmapFactory.decodeByteArray(decodedString, 0, decodedString.length);
 		imageView.setImageBitmap(decodedByte);
 		imageView.setVisibility(View.VISIBLE);
