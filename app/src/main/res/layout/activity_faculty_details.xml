@@ -3,7 +3,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@color/colorPgSecondary"
     tools:context="pg.pgapp.activities.app.FacultyDetailsActivity">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
 
     <TextView
         android:id="@+id/facultyNameTextView"
@@ -12,10 +19,17 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
-        android:text="TextView"
-        android:textSize="18sp"
-        android:gravity="center_vertical|center_horizontal"/>
-
+        android:gravity="center_vertical|center_horizontal"
+        android:text="Nazwa wydzialu"
+        android:textSize="18sp" />
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/facultyNameTextView"
+        android:text="Katedry:"
+        android:textColor="@color/colorWhite"
+        android:textSize="18sp" />
     <Spinner
         android:id="@+id/departmentsSpiner"
         android:layout_width="match_parent"
@@ -23,35 +37,11 @@
         android:layout_below="@+id/facultyNameTextView"
         android:layout_toEndOf="@+id/textView2" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/selectedTextView"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/departmentsSpiner"-->
-        <!--android:layout_centerHorizontal="true"-->
-        <!--android:layout_marginTop="56dp"-->
-        <!--android:text="TextView"-->
-        <!--android:textSize="30sp" />-->
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#123456"
-        android:gravity="center_vertical|center_horizontal"
-        android:text="JAKAS STOPKA"
-        android:textSize="18sp"
-        android:layout_gravity="bottom"
-        android:layout_alignParentBottom="true"/>
-
-    <TextView
+    <WebView
         android:id="@+id/departmentDescription"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/departmentsSpiner"
-        android:text="OPIS KATEDRY"
-        android:textSize="18sp" />
-
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView2" />
     <TextView
         android:id="@+id/readMoreTextView"
         android:layout_width="wrap_content"
@@ -61,12 +51,21 @@
         android:text="Czytaj więcej..."
         android:textSize="18sp" />
 
+</LinearLayout>
+
+
+
+
+
     <TextView
-        android:id="@+id/textView2"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/facultyNameTextView"
-        android:text="Katedry:"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom"
+        android:background="@color/colorPgPrimary"
+        android:gravity="center_vertical|center_horizontal"
+        android:text="JAKAS STOPKA"
         android:textSize="18sp" />
+
+
 </RelativeLayout>
