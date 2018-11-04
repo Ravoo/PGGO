@@ -31,13 +31,7 @@ public class Initializer {
 
 		setBuildingsOnMap(mMap);
 
-		//pobranie mojej lokalizacji
-		if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
-				&& ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-			mMap.setMyLocationEnabled(true);
-		}
-
-		LatLng noweEti = new LatLng(54.371648, 18.612357);
+		LatLng noweEti = new LatLng(54.371795, 18.616282);
 		mMap.moveCamera(CameraUpdateFactory.newLatLng(noweEti)); //TODO: domyślnie będzie move to my location
 		mMap.animateCamera(CameraUpdateFactory.zoomTo(18));
 	}
