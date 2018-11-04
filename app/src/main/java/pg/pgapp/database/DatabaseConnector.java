@@ -26,7 +26,6 @@ import pg.pgapp.models.ModelType;
 
 public class DatabaseConnector {
 
-	// todo change to server ip:port
 	private static String URL = "http://40.121.44.25:8080/";
 	private static String BUILDING_PATH = "building/";
 	private static String BUILDING_DISPLAY_PATH = "building/display/";
