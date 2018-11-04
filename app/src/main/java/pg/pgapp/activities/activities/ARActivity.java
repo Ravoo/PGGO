@@ -1,11 +1,15 @@
 package pg.pgapp.activities.activities;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.os.Bundle;
 import android.support.design.widget.BaseTransientBottomBar;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -34,6 +38,7 @@ import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
 import pg.pgapp.R;
+import pg.pgapp.activities.main.MapActivity;
 import pg.pgapp.ar.helpers.DisplayRotationHelper;
 import pg.pgapp.ar.helpers.TapHelper;
 import pg.pgapp.ar.rendering.BackgroundRenderer;
@@ -48,8 +53,8 @@ import uk.co.appoly.arcorelocation.utils.Utils2D;
 
 public class ARActivity extends AppCompatActivity implements GLSurfaceView.Renderer {
 
-//	private static final int MY_PERMISSIONS_REQUEST_CAMERA_ACCESS = 1;
-//	private boolean cameraAccessGranted = false;
+	private static final int MY_PERMISSIONS_REQUEST_CAMERA_ACCESS = 2;
+	private boolean cameraAccessGranted = false;
 
 	private static final String TAG = ARActivity.class.getSimpleName();
 
@@ -81,6 +86,9 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_ar);
+
+        checkPermissions();
+
 		mSurfaceView = findViewById(R.id.surfaceview);
 		mDisplayRotationHelper = new DisplayRotationHelper(/*context=*/ this);
 
@@ -216,7 +224,7 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 		}
 	}
 
-	@Override
+	/*@Override
 	public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] results) {
 		if (!ARLocationPermissionHelper.hasPermission(this)) {
 			Toast.makeText(this,
@@ -227,7 +235,7 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 			}
 			finish();
 		}
-	}
+	}*/
 
 	@Override
 	public void onWindowFocusChanged(boolean hasFocus) {
@@ -435,15 +443,6 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 		});
 	}
 
-/*	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.ar_placeholder);
-
-		checkPermissions();
-	}*/
-/*
-
 	@Override
 	public void onRequestPermissionsResult(int requestCode,
 										   String permissions[], int[] grantResults) {
@@ -455,6 +454,8 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 					cameraAccessGranted = true;
 				} else {
 					cameraAccessGranted = false;
+                    Toast.makeText(this,
+                            "Do korzystania z modułu AR wymagany jest dostęp do kamery urządzenia!", Toast.LENGTH_LONG).show();
 					//return to map activity
 					Intent intent = new Intent(this, MapActivity.class);
 					startActivity(intent);
@@ -463,13 +464,12 @@ public class ARActivity extends AppCompatActivity implements GLSurfaceView.Rende
 			}
 		}
 	}
-*/
 
-	/*private void checkPermissions() {
+	private void checkPermissions() {
 		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA_ACCESS);
 		} else {
 			cameraAccessGranted = true;
 		}
-	}*/
+	}
 }
