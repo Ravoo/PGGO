@@ -1,12 +1,11 @@
 package pg.pgapp;
 
-import android.Manifest;
 import android.content.Context;
-import android.content.pm.PackageManager;
-import android.support.v4.app.ActivityCompat;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -18,6 +17,7 @@ import java.util.ArrayList;
 import lombok.NonNull;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.BuildingDisplay;
+import pg.pgapp.models.POI;
 
 public class Initializer {
 
@@ -43,6 +43,21 @@ public class Initializer {
         Gson gson = new Gson();
         ArrayList<BuildingDisplay> buildings = gson.fromJson(readDataFromFile("BuildingsConfiguration.json"), listType);
         */
+		ArrayList<POI> pois = new DatabaseConnector().getPOIs();
+		if (pois != null) {
+			pois.forEach(poi -> {
+				CircleOptions poiOptions = new CircleOptions()
+						.center(new LatLng(poi.getCoordinate().getLatitude(), poi.getCoordinate().getLongitude()))
+						.strokeColor(poi.getModelColor())
+						.fillColor(poi.getModelColor())
+						.strokeWidth(5)
+						.radius(3);
+				Circle circle = mMap.addCircle(poiOptions);
+				circle.setClickable(true);
+			});
+			mMap.setOnCircleClickListener(new OnCircleClickListener(context));
+
+		}
 		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays();
 		if (buildings != null) {
 			buildings.forEach(
