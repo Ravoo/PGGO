@@ -45,6 +45,10 @@ dependencies {
     // https://github.com/javagl/Obj
     implementation 'de.javagl:obj:0.2.1'
     implementation 'com.github.appoly:ARCore-Location:0.2.1'
+
+    // ShowCaseView
+    implementation 'com.github.amlcurran.showcaseview:library:5.4.3'
+    implementation 'com.github.deano2390:MaterialShowcaseView:1.2.0'
 }
 
 repositories {
