@@ -29,6 +29,7 @@ public class DatabaseConnector {
 
 	private static String URL = "http://40.121.44.25:8080/";
 //	private static String URL = "http://192.168.0.17:8080/";
+
   
 	private static String BUILDING_PATH = "building/";
 	private static String BUILDING_DISPLAY_PATH = "building/display/";
