@@ -56,4 +56,6 @@
     <string name="search_placeholder">np. Budynek Nowego ETI</string>
     <string name="search_button_text">Szukaj</string>
 
+    <string name="plane_finding">Searching for surfaces&#8230;</string>
+
 </resources>
