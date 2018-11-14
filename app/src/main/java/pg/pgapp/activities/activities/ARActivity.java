@@ -29,11 +29,8 @@ import java.util.concurrent.ExecutionException;
 
 import pg.pgapp.R;
 import pg.pgapp.ar.DemoUtils;
-import pg.pgapp.models.BuildingDisplay;
 import uk.co.appoly.arcorelocation.LocationMarker;
 import uk.co.appoly.arcorelocation.LocationScene;
-import uk.co.appoly.arcorelocation.rendering.LocationNode;
-import uk.co.appoly.arcorelocation.rendering.LocationNodeRender;
 import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper;
 
 public class ARActivity extends AppCompatActivity {
@@ -46,13 +43,12 @@ public class ARActivity extends AppCompatActivity {
 
 	// Renderables for this example
 	private ModelRenderable andyRenderable;
-	private ViewRenderable exampleLayoutRenderable;
+	private List<ViewRenderable> layoutsRenderable = new ArrayList<>();
 
 	// Our ARCore-Location scene
 	private LocationScene locationScene;
 
 	private Coordinate destination;
-	private List<Coordinate> buildingsCoords;
 
 
 	@Override
@@ -63,13 +59,28 @@ public class ARActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_sceneform);
 		arSceneView = findViewById(R.id.ar_scene_view);
 
-		buildingsCoords = Arrays.asList(new Coordinate(54.371696, 18.612375), new Coordinate(54.370910, 18.613070), new Coordinate(54.371649, 18.614504));
+        List<Coordinate> buildingsCoords = Arrays.asList(new Coordinate(54.371696, 18.612375), new Coordinate(54.370910, 18.613070), new Coordinate(54.371649, 18.614504));
 
 		// Build a renderable from a 2D View.
-		CompletableFuture<ViewRenderable> exampleLayout =
+		/*CompletableFuture<ViewRenderable> exampleLayout =
 				ViewRenderable.builder()
 						.setView(this, R.layout.example_layout)
-						.build();
+						.build();*/
+
+		/*CompletableFuture[] layouts = new CompletableFuture[buildingsCoords.size()];
+		for (int i = 0; i < buildingsCoords.size(); i++) {
+		    layouts[i] = ViewRenderable.builder()
+                    .setView(this, R.layout.example_layout)
+                    .build();
+        }*/
+
+		List<CompletableFuture<ViewRenderable>> layouts = new ArrayList<>();
+		for (Coordinate coords : buildingsCoords) {
+		    layouts.add(ViewRenderable.builder()
+                .setView(this, R.layout.example_layout)
+                .build()
+            );
+        }
 
 		// When you build a Renderable, Sceneform loads its resources in the background while returning
 		// a CompletableFuture. Call thenAccept(), handle(), or check isDone() before calling get().
@@ -77,9 +88,10 @@ public class ARActivity extends AppCompatActivity {
 				.setSource(this, R.raw.andy)
 				.build();
 
-
 		CompletableFuture.allOf(
-				exampleLayout,
+                layouts.get(0),
+				layouts.get(1),
+				layouts.get(2),
 				andy)
 				.handle(
 						(notUsed, throwable) -> {
@@ -93,7 +105,9 @@ public class ARActivity extends AppCompatActivity {
 							}
 
 							try {
-								exampleLayoutRenderable = exampleLayout.get();
+							    layoutsRenderable.add(layouts.get(0).get());
+                                layoutsRenderable.add(layouts.get(1).get());
+                                layoutsRenderable.add(layouts.get(2).get());
 								andyRenderable = andy.get();
 								hasFinishedLoading = true;
 
@@ -126,44 +140,19 @@ public class ARActivity extends AppCompatActivity {
 									LocationMarker layoutLocationMarker = new LocationMarker(
 											coords.longitude,
 											coords.latitude,
-											getExampleView()
+											getExampleView(buildingsCoords.indexOf(coords))
 									);
 
 									// An example "onRender" event, called every frame
 									// Updates the layout with the markers distance
-									layoutLocationMarker.setRenderEvent(node -> {
-										View eView = exampleLayoutRenderable.getView();
-										TextView distanceTextView = eView.findViewById(R.id.textView);
-										distanceTextView.setText(node.getDistance() + " m");
-									});
+                                    layoutLocationMarker.setRenderEvent(node -> {
+                                        View eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
+                                        TextView distanceTextView = eView.findViewById(R.id.textView);
+                                        distanceTextView.setText(node.getDistance() + " m");
+                                    });
 									// Adding the marker
 									locationScene.mLocationMarkers.add(layoutLocationMarker);
 								}
-								/*LocationMarker layoutLocationMarker = new LocationMarker(
-										18.612375,
-										54.371696,
-										getExampleView()
-								);
-
-								// An example "onRender" event, called every frame
-								// Updates the layout with the markers distance
-								layoutLocationMarker.setRenderEvent(new LocationNodeRender() {
-									@Override
-									public void render(LocationNode node) {
-										View eView = exampleLayoutRenderable.getView();
-										TextView distanceTextView = eView.findViewById(R.id.textView);
-										distanceTextView.setText(node.getDistance() + " m");
-									}
-								});
-								// Adding the marker
-								locationScene.mLocationMarkers.add(layoutLocationMarker);*/
-
-								// Adding a simple location marker of a 3D model
-								/*locationScene.mLocationMarkers.add(
-										new LocationMarker(
-												-0.119677,
-												51.478494,
-												getAndy()));*/
 							}
 
 							Frame frame = arSceneView.getArFrame();
@@ -198,12 +187,12 @@ public class ARActivity extends AppCompatActivity {
 	 *
 	 * @return
 	 */
-	private Node getExampleView() {
+	private Node getExampleView(int layoutIndex) {
 		Node base = new Node();
-		base.setRenderable(exampleLayoutRenderable);
+		base.setRenderable(layoutsRenderable.get(layoutIndex));
 		Context c = this;
 		// Add  listeners etc here
-		View eView = exampleLayoutRenderable.getView();
+		View eView = layoutsRenderable.get(layoutIndex).getView();
 		eView.setOnTouchListener((v, event) -> {
 			Toast.makeText(
 					c, "Location marker touched.", Toast.LENGTH_LONG)
