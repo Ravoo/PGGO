@@ -21,11 +21,15 @@ import com.google.ar.sceneform.Node;
 import com.google.ar.sceneform.rendering.ModelRenderable;
 import com.google.ar.sceneform.rendering.ViewRenderable;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import pg.pgapp.R;
 import pg.pgapp.ar.DemoUtils;
+import pg.pgapp.models.BuildingDisplay;
 import uk.co.appoly.arcorelocation.LocationMarker;
 import uk.co.appoly.arcorelocation.LocationScene;
 import uk.co.appoly.arcorelocation.rendering.LocationNode;
@@ -47,6 +51,9 @@ public class ARActivity extends AppCompatActivity {
 	// Our ARCore-Location scene
 	private LocationScene locationScene;
 
+	private Coordinate destination;
+	private List<Coordinate> buildingsCoords;
+
 
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -55,6 +62,8 @@ public class ARActivity extends AppCompatActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_sceneform);
 		arSceneView = findViewById(R.id.ar_scene_view);
+
+		buildingsCoords = Arrays.asList(new Coordinate(54.371696, 18.612375), new Coordinate(54.370910, 18.613070), new Coordinate(54.371649, 18.614504));
 
 		// Build a renderable from a 2D View.
 		CompletableFuture<ViewRenderable> exampleLayout =
@@ -112,7 +121,25 @@ public class ARActivity extends AppCompatActivity {
 
 								// Now lets create our location markers.
 								// First, a layout
-								LocationMarker layoutLocationMarker = new LocationMarker(
+
+								for (Coordinate coords : buildingsCoords) {
+									LocationMarker layoutLocationMarker = new LocationMarker(
+											coords.longitude,
+											coords.latitude,
+											getExampleView()
+									);
+
+									// An example "onRender" event, called every frame
+									// Updates the layout with the markers distance
+									layoutLocationMarker.setRenderEvent(node -> {
+										View eView = exampleLayoutRenderable.getView();
+										TextView distanceTextView = eView.findViewById(R.id.textView);
+										distanceTextView.setText(node.getDistance() + " m");
+									});
+									// Adding the marker
+									locationScene.mLocationMarkers.add(layoutLocationMarker);
+								}
+								/*LocationMarker layoutLocationMarker = new LocationMarker(
 										18.612375,
 										54.371696,
 										getExampleView()
@@ -129,14 +156,14 @@ public class ARActivity extends AppCompatActivity {
 									}
 								});
 								// Adding the marker
-								locationScene.mLocationMarkers.add(layoutLocationMarker);
+								locationScene.mLocationMarkers.add(layoutLocationMarker);*/
 
 								// Adding a simple location marker of a 3D model
-								locationScene.mLocationMarkers.add(
+								/*locationScene.mLocationMarkers.add(
 										new LocationMarker(
 												-0.119677,
 												51.478494,
-												getAndy()));
+												getAndy()));*/
 							}
 
 							Frame frame = arSceneView.getArFrame();
@@ -273,7 +300,7 @@ public class ARActivity extends AppCompatActivity {
 				ARLocationPermissionHelper.launchPermissionSettings(this);
 			} else {
 				Toast.makeText(
-						this, "Camera permission is needed to run this application", Toast.LENGTH_LONG)
+						this, "Kamera urządzenia jest wymagana do korzystania z trybu AR!", Toast.LENGTH_LONG)
 						.show();
 			}
 			finish();
@@ -319,5 +346,15 @@ public class ARActivity extends AppCompatActivity {
 
 		loadingMessageSnackbar.dismiss();
 		loadingMessageSnackbar = null;
+	}
+
+	private class Coordinate {
+		double latitude;
+		double longitude;
+
+		Coordinate (double lat, double lon) {
+			latitude = lat;
+			longitude = lon;
+		}
 	}
 }
