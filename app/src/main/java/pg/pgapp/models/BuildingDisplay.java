@@ -13,6 +13,7 @@ import lombok.Setter;
 public class BuildingDisplay extends BaseModel {
 	private Long buildingId;
 	private List<Coordinate> coordinates;
+	private Coordinate center;
 
 	@Getter
 	@Setter

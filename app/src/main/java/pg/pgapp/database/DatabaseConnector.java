@@ -23,18 +23,19 @@ import pg.pgapp.models.BuildingDisplay;
 import pg.pgapp.models.Department;
 import pg.pgapp.models.Faculty;
 import pg.pgapp.models.ModelType;
+import pg.pgapp.models.POI;
 
 public class DatabaseConnector {
 
 	//private static String URL = "http://40.121.44.25:8080/";
 	private static String URL = "http://192.168.137.1:8080/";
-  
+	
 	private static String BUILDING_PATH = "building/";
 	private static String BUILDING_DISPLAY_PATH = "building/display/";
 	private static String BUILDING_PICTURE_PATH = "building/picture/";
 	private static String FACULTY_PATH = "faculty/";
 	private static String DEPARTMENT_PATH = "department/";
-
+	private static String POI_PATH = "poi/";
 
 	private String getModel(String path, Long id) {
 		URL url;
@@ -105,6 +106,10 @@ public class DatabaseConnector {
 		return new Gson().fromJson(getModel(BUILDING_PATH, id), Building.class);
 	}
 
+	private BuildingDisplay getDatabaseBuildingDisplayModel(Long id) {
+		return new Gson().fromJson(getModel(BUILDING_DISPLAY_PATH, id), BuildingDisplay.class);
+	}
+
 	private Faculty getDatabaseFacultyModel(Long id) {
 		return new Gson().fromJson(getModel(FACULTY_PATH, id), Faculty.class);
 	}
@@ -133,10 +138,17 @@ public class DatabaseConnector {
 		}.getType());
 	}
 
+	private ArrayList<POI> getDatabasePOIModels(String name) {
+		return new Gson().fromJson(getModels(POI_PATH, name), new TypeToken<ArrayList<POI>>() {
+		}.getType());
+	}
+
 	private BaseModel getModel(Long id, ModelType modelType) {
 		ExecutorService executorService = Executors.newSingleThreadExecutor();
 		Future<BaseModel> result = executorService.submit(() -> {
 			switch (modelType) {
+				case BUILDING_DISPLAY:
+					return getDatabaseBuildingDisplayModel(id);
 				case BUILDING:
 					return getDatabaseBuildingModel(id);
 				case FACULTY:
@@ -161,6 +173,10 @@ public class DatabaseConnector {
 
 	public Building getBuildingModel(Long id) {
 		return (Building) getModel(id, ModelType.BUILDING);
+	}
+
+	public BuildingDisplay getBuildingDisplayModel(Long id) {
+		return (BuildingDisplay) getModel(id, ModelType.BUILDING_DISPLAY);
 	}
 
 	public String getBuildingPicture(Long id) {
@@ -194,6 +210,8 @@ public class DatabaseConnector {
 					return getDatabaseFacultyModels(name);
 				case DEPARTMENT:
 					return getDatabaseDepartmentModels(name);
+				case POI:
+					return getDatabasePOIModels(name);
 				default:
 					return null;
 			}
@@ -213,6 +231,11 @@ public class DatabaseConnector {
 	public ArrayList<BuildingDisplay> getBuildingDisplays() {
 		return (ArrayList<BuildingDisplay>) getModels("", ModelType.BUILDING_DISPLAY);
 	}
+
+	public ArrayList<POI> getPOIs() {
+		return (ArrayList<POI>) getModels("", ModelType.POI);
+	}
+
 
 	public ArrayList<Building> getBuildingModels(String name) {
 		return (ArrayList<Building>) getModels(name, ModelType.BUILDING);
