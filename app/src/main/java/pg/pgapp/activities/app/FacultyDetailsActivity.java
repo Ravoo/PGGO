@@ -13,6 +13,10 @@ import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -21,19 +25,21 @@ import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.Department;
 import pg.pgapp.models.Faculty;
 
-public class FacultyDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class FacultyDetailsActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener, View.OnClickListener {
+
+	int showcaseItem = 0;
 	Faculty faculty;
 	Department department;
 	Spinner spinner;
-
-	@Override
+    WebView departmentDescriptionTextView;
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_faculty_details);
 		spinner = findViewById(R.id.departmentsSpiner);
-
 		initializeDetailView();
 
+		ShowCase();
 	}
 
 	private void initializeDetailView() {
@@ -42,7 +48,6 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 		readMoreTextView.setClickable(true);
 		readMoreTextView.setMovementMethod(LinkMovementMethod.getInstance());
 		String text = "<a href='https://eti.pg.edu.pl/katedra-inteligentnych-systemow-interaktywnych/o-katedrze'> Czytaj więcej... </a>";
-		//String text = "<a href='" + department.getPageUrl() + "'> Czytaj więcej... </a>";
 		readMoreTextView.setText(Html.fromHtml(text, Html.FROM_HTML_MODE_COMPACT));
 		readMoreTextView.setTextColor(Color.WHITE);
 		Intent intent = getIntent();
@@ -52,7 +57,6 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 		facultyNameTextView.setText(faculty.getName());
 		facultyNameTextView.setTextColor(Color.WHITE);
 
-
 		ArrayList<String> departmentsForSpinner = new ArrayList<>(faculty.getDepartmentsNames());
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departmentsForSpinner);
 		spinner.setAdapter(adapter);
@@ -61,7 +65,7 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-		WebView departmentDescriptionTextView = findViewById(R.id.departmentDescription);
+		departmentDescriptionTextView = findViewById(R.id.departmentDescription);
 		departmentDescriptionTextView.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
 		//TextView selectedTV = findViewById(R.id.selectedTextView);
 		//selectedTV.setText(spinner.getItemAtPosition(position).toString());
@@ -76,4 +80,41 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 	public void onNothingSelected(AdapterView<?> parent) {
 
 	}
+
+    ShowcaseView showcaseView;
+	@Override
+	public void onClick(View v) {
+        switch (showcaseItem)
+        {
+            case 0:
+                showcaseView.setShowcase(new ViewTarget(spinner),true);
+                showcaseView.setContentTitle("");
+                showcaseView.setContentText("Wybierz katedrę o której chcesz się dowiedzieć czegoś więcej");
+                break;
+            case 1:
+                showcaseView.setShowcase(new ViewTarget(departmentDescriptionTextView),true);
+                showcaseView.setContentText("W tym miejscu wyświetlą się informacje o wybranej katedrze");
+                break;
+            case 2:
+                showcaseView.hide();
+                break;
+        }
+        showcaseItem++;
+	}
+
+	private void ShowCase() {
+        long singleShot = 20; //Dzięki tej liczbie showcase wykona się tylko raz, na zainstalowanie aplikacji
+
+        showcaseView = new ShowcaseView.Builder(this).singleShot(singleShot)
+                .setTarget(Target.NONE)
+                .setOnClickListener(this)
+                .setContentTitle("Informacje o katedrach")
+                .setContentText("Na tej podstronie możesz dowiedzieć się więcej o katedrach wydziału, do którego należy budynek.")
+                .setStyle(R.style.CustomShowcaseTheme2)
+                .build();
+
+        showcaseView.setButtonText("Ok!");
+	}
+
+
 }

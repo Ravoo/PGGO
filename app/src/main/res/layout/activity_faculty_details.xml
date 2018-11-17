@@ -35,7 +35,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/facultyNameTextView"
-        android:layout_toEndOf="@+id/textView2" />
+        android:layout_toEndOf="@+id/textView2"
+        android:textColor="#FFFFFF"/>
 
     <WebView
         android:id="@+id/departmentDescription"
@@ -54,9 +55,6 @@
 </LinearLayout>
 
 
-
-
-
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -64,7 +62,7 @@
         android:layout_gravity="bottom"
         android:background="@color/colorPgPrimary"
         android:gravity="center_vertical|center_horizontal"
-        android:text="JAKAS STOPKA"
+        android:text="PG GO © "
         android:textSize="18sp" />
 
 

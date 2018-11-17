@@ -43,7 +43,6 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
 		setContentView(R.layout.activity_building_details);
 		initializeDetailView(savedInstanceState);
         ShowCase();
@@ -125,10 +124,9 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
     ShowcaseView showcaseView;
 	private void ShowCase()
     {
-
     	long singleShot = 19; //Dzięki tej liczbie showcase wykona się tylko raz, na zainstalowanie aplikacji
 
-        showcaseView = new ShowcaseView.Builder(this)//.singleShot(singleShot)
+        showcaseView = new ShowcaseView.Builder(this).singleShot(singleShot)
                 .setTarget(Target.NONE)
                 .setOnClickListener(this)
                 .setContentTitle("Detale budynku")
