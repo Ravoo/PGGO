@@ -89,15 +89,12 @@
 
     <PreferenceCategory android:title="@string/regional_settings">
 
-        <CheckBoxPreference
-            android:checked="false"
-            android:key="language_pl_key"
-            android:title="@string/language_pl" />
-
-        <CheckBoxPreference
-            android:enabled="false"
-            android:key="language_eng_key"
-            android:title="@string/language_eng" />
+        <ListPreference
+            android:defaultValue="pl"
+            android:entries="@array/language_array"
+            android:entryValues="@array/language_values"
+            android:key="language"
+            android:title="@string/choose_language" />
     </PreferenceCategory>
 
     <PreferenceCategory android:title="@string/more_information">

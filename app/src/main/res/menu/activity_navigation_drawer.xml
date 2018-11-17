@@ -8,16 +8,16 @@
         <item
             android:id="@+id/nav_search"
             android:icon="@drawable/menu_search"
-            android:title="Szukaj" />
+            android:title="@string/search_navbar" />
         <item
             android:id="@+id/nav_ar"
             android:icon="@drawable/ic_menu_camera"
-            android:title="AR" />
+            android:title="@string/ar_navbar" />
 
         <item
             android:id="@+id/nav_manage"
             android:icon="@drawable/ic_menu_manage"
-            android:title="Ustawienia" />
+            android:title="@string/settings_navbar" />
     </group>
 
     <!--<item android:title="Communicate">-->

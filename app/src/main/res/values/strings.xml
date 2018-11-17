@@ -12,8 +12,6 @@
     <string name="compass_summary">Wyświetlaj ikonę kompasu</string>
     <string name="my_location_button">Przycisk lokalizacji</string>
     <string name="my_location_button_summary">Wyświetlaj przycisk lokalizacji</string>
-    <!--<string name="my_location_layer">Warstwa lokalizacji</string>
-    <string name="my_location_layer_summary">Wyświetlaj informacje o lokalizacji</string>-->
 
     <string name="all_gestures">Gesty</string>
     <string name="all_gestures_summary">Umożliwia wykorzystywanie gestów do kontrolowania mapy</string>
@@ -34,26 +32,29 @@
 
     <string name="regional_settings">Ustawienia regionalne</string>
     <string name="language_pl">Język polski</string>
+    <string name="choose_language">Wybierz język</string>
     <string name="language_eng">Język angielski</string>
 
     <string name="more_information">Dodatkowe informacje</string>
     <string name="link_title">Dowiedz się więcej</string>
     <string name="link_summary">Strona główna Politechniki Gdańskiej</string>
 
-    <string name="ar_placeholder">AR Placeholder</string>
-
-
-    <string name="main_menu">PGGO \n menu główne</string>
     <string name="options_button">Ustawienia</string>
-    <string name="title_activity_navigation_drawer">NavigationDrawerActivity</string>
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_search">SearchActivity</string>
-    <string name="search_label">Wprowadź szukana frazę:</string>
+    <string name="search_label">Wprowadź szukaną frazę:</string>
     <string name="search_placeholder">np. Budynek Nowego ETI</string>
     <string name="search_button_text">Szukaj</string>
+
+    <string name="plane_finding">Searching for surfaces&#8230;</string>
+    <string name="settings_navbar">Ustawienia</string>
+    <string name="ar_navbar">AR</string>
+    <string name="search_navbar">Szukaj</string>
+    <string name="pg_guide_title">Przewodnik po PG</string>
+    <string name="pg_guide_subtitle">Projekt inżynierski 2018/2019</string>
 
 </resources>
