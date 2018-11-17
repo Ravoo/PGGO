@@ -15,15 +15,23 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import java.util.Locale;
+import java.util.Random;
 
 import pg.pgapp.R;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.Building;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
-public class BuildingDetailsActivity extends AppCompatActivity {
+public class BuildingDetailsActivity extends AppCompatActivity implements View.OnClickListener{
 
+    int showcaseItem = 0;
 	Building building;
     ImageView imageView;
     TextView buildingNameTextView;
@@ -35,9 +43,9 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-
 		setContentView(R.layout.activity_building_details);
 		initializeDetailView(savedInstanceState);
+        ShowCase();
 	}
     @Override
     protected void onSaveInstanceState(Bundle outState) {
@@ -56,6 +64,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
 		buildingAddressTextView = findViewById(R.id.buildingAddress);
 		buildingAddressTextView.setTextColor(Color.WHITE);
+		buildingAddressTextView.setText("Narutowicza 11/12, 80-233 Gdańsk");
 
 		buildingDescription = findViewById(R.id.buildingDescription);
 		buildingDescription.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
@@ -78,21 +87,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 		String dataString = String.format(Locale.US, justifyTag, building.getDescription());
 		buildingDescription.loadDataWithBaseURL("", dataString, "text/html", "UTF-8", "");
 
-
-
-		if(savedInstanceState != null) {
-            byte[] pic = savedInstanceState.getByteArray("pic");
-            serializedPicture = pic;
-            Bitmap decodedByte = BitmapFactory.decodeByteArray(pic, 0, pic.length);
-            imageView.setImageBitmap(decodedByte);
-            imageView.setVisibility(View.VISIBLE);
-            ProgressBar progressBar = findViewById(R.id.progressBar1);
-            progressBar.setVisibility(View.GONE);
-        }else
-        {
-            new PictureDownloader().execute();
-        }
-
+		new PictureDownloader().execute();
 	}
 
 	public void changeActivity(View view) {
@@ -114,7 +109,7 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 
 	}
 
-	private class PictureDownloader extends AsyncTask<Void, Void, String> {
+    private class PictureDownloader extends AsyncTask<Void, Void, String> {
 		@Override
 		protected void onPostExecute(String result) {
 			Log.v("Photo downloaded", result);
@@ -126,4 +121,54 @@ public class BuildingDetailsActivity extends AppCompatActivity {
 			return new DatabaseConnector().getBuildingPicture(building.getId());
 		}
 	}
+    ShowcaseView showcaseView;
+	private void ShowCase()
+    {
+    	long singleShot = 19; //Dzięki tej liczbie showcase wykona się tylko raz, na zainstalowanie aplikacji
+
+        showcaseView = new ShowcaseView.Builder(this).singleShot(singleShot)
+                .setTarget(Target.NONE)
+                .setOnClickListener(this)
+                .setContentTitle("Detale budynku")
+                .setContentText("Oto podstrona z detalami budynku")
+				.setStyle(R.style.CustomShowcaseTheme2)
+                .build();
+
+        showcaseView.setButtonText("Ok!");
+    }
+
+
+    @Override
+    public void onClick(View v) {
+
+        switch (showcaseItem)
+        {
+            case 0:
+                showcaseView.setShowcase(new ViewTarget(imageView),true);
+                showcaseView.setContentTitle("Obrazek budynku");
+                showcaseView.setContentText("Wygląd opisywanego budynku");
+                break;
+            case 1:
+                showcaseView.setShowcase(new ViewTarget(buildingNameTextView),true);
+                showcaseView.setContentTitle("Nazwa budynku");
+                showcaseView.setContentText("Nazwa opisywanego budynku");
+                break;
+            case 2:
+                showcaseView.setShowcase(new ViewTarget(buildingFacultyTextView),true);
+                showcaseView.setContentTitle("Nazwa wydziału");
+                showcaseView.setContentText("Nazwa wydziału, do którego należy budynek. Kliknij w nią aby dowiedzieć się więcej");
+                break;
+            case 3:
+                showcaseView.setShowcase(new ViewTarget(buildingDescription),true);
+                showcaseView.setContentTitle("Opis");
+                showcaseView.setContentText("Krótki opis budynku");
+                break;
+            case 4:
+                showcaseView.hide();
+                break;
+        }
+        showcaseItem++;
+    }
+
+
 }

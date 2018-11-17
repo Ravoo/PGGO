@@ -16,6 +16,10 @@ import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 
+import com.github.amlcurran.showcaseview.ShowcaseView;
+import com.github.amlcurran.showcaseview.targets.Target;
+import com.github.amlcurran.showcaseview.targets.ViewTarget;
+
 import java.util.ArrayList;
 
 import pg.pgapp.R;
@@ -28,17 +32,20 @@ import pg.pgapp.models.Department;
 import pg.pgapp.models.Faculty;
 import pg.pgapp.models.Tag;
 
-public class SearchActivity extends ListActivity {
+public class SearchActivity extends ListActivity implements View.OnClickListener {
 
+	int showcaseItem = 0;
+	ShowcaseView showcaseView;
 	ArrayAdapter<SpannableString> adapter;
 	ArrayList<Long> buildingsIds = new ArrayList<>();
 	ArrayList<Long> facultiesIds = new ArrayList<>();
 	ArrayList<Long> departmentsIds = new ArrayList<>();
-
+	EditText editText;
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
+		editText = findViewById(R.id.search_input);
 		adapter = new ArrayAdapter<SpannableString>(this,
 				android.R.layout.simple_list_item_1) {
 
@@ -56,6 +63,7 @@ public class SearchActivity extends ListActivity {
 			}
 		};
 		setListAdapter(adapter);
+		ShowCase();
 	}
 
 	@Override
@@ -80,7 +88,6 @@ public class SearchActivity extends ListActivity {
 	}
 
 	public void getSearchResult(View view) {
-		EditText editText = findViewById(R.id.search_input);
 		ArrayList<Building> buildings = new DatabaseConnector().getBuildingModels(editText.getText().toString());
 		ArrayList<Faculty> faculties = new DatabaseConnector().getFacultyModels(editText.getText().toString());
 		ArrayList<Department> departments = new DatabaseConnector().getDepartmentModels(editText.getText().toString());
@@ -107,5 +114,39 @@ public class SearchActivity extends ListActivity {
 		str.setSpan(new ForegroundColorSpan(baseModel.getModelColor()), 0, tag.toString().length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		str.setSpan(new ForegroundColorSpan(0xFFFFFFFF), tag.toString().length() + 1, tag.toString().length() + name.length() + 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 		return str;
+	}
+
+	private void ShowCase()	{
+		long singleShot = 21; //Dzięki tej liczbie showcase wykona się tylko raz, na zainstalowanie aplikacji
+
+		showcaseView = new ShowcaseView.Builder(this).singleShot(singleShot)
+				.setTarget(Target.NONE)
+				.setOnClickListener(this)
+				.setContentTitle("Wyszukiwarka budynków")
+				.setContentText("Ta funkcjonalność pozwala na wyszukiwanie budynku po jego nazwie.")
+				.setStyle(R.style.CustomShowcaseTheme2)
+				.build();
+
+		showcaseView.setButtonText("Ok!");
+	}
+
+	@Override
+	public void onClick(View v) {
+		switch (showcaseItem)
+		{
+			case 0:
+				showcaseView.setShowcase(new ViewTarget(editText),true);
+				showcaseView.setContentTitle("");
+				showcaseView.setContentText("Wystarczy, że wpiszesz kawałek nazwy szukanego budynku");
+				break;
+			case 1:
+				showcaseView.setShowcase(new ViewTarget(findViewById(R.id.search_button)),true);
+				showcaseView.setContentText("I wciśniesz przycisk 'Szukaj'");
+				break;
+			case 2:
+				showcaseView.hide();
+				break;
+		}
+		showcaseItem++;
 	}
 }

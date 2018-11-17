@@ -2,7 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/PGGO.iml" filepath="$PROJECT_DIR$/.idea/PGGO.iml" />
+      <module fileurl="file://$PROJECT_DIR$/PGApp.iml" filepath="$PROJECT_DIR$/PGApp.iml" />
+      <module fileurl="file://D:\Projekty\Android\PGApp\.idea\PGGO.iml" filepath="D:\Projekty\Android\PGApp\.idea\PGGO.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>

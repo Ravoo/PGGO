@@ -16,6 +16,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageButton;
 
 import com.google.android.gms.maps.GoogleMap;
@@ -24,13 +25,19 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import java.util.Random;
+
 import java.util.Locale;
+
 
 import pg.pgapp.Initializer;
 import pg.pgapp.R;
 import pg.pgapp.activities.activities.ARActivity;
 import pg.pgapp.activities.activities.OptionsActivity;
 import pg.pgapp.activities.activities.SearchActivity;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
+import uk.co.deanwild.materialshowcaseview.MaterialShowcaseView;
+import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
@@ -42,6 +49,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	private boolean locationPermissionGranted = false;
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
+	private ImageButton drawerMenuButton;
 
 	public static SupportMapFragment newInstance() {
 		Bundle args = new Bundle();
@@ -76,7 +84,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 		checkPermissions();
 
+		drawerMenuButton = (ImageButton)findViewById(R.id.menuImageButton);
 		initializeDrawer();
+
+		ShowCase();
+	}
+	public void ShowCase()
+	{
+	    //zeby włączało się zawsze, łatwiej testować
+	    Random randomNumber = new Random();
+		ShowcaseConfig config = new ShowcaseConfig();
+		config.setDelay(500);
+		MaterialShowcaseSequence sequence = new MaterialShowcaseSequence(this,Integer.toString(randomNumber.nextInt()));
+		sequence.setConfig(config);
+
+		sequence.addSequenceItem(drawerMenuButton, "Witaj w przewodniku po Politechnice Gdańskiej. Wciśnij podświetlony przycisk" +
+                " aby otworzyć menu.", "Ok");
+
+		sequence.start();
 	}
 
 	public void setLanguageForApp(String languageToLoad) {
@@ -99,6 +124,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mMap = googleMap;
 		Initializer initializer = new Initializer(this);
 		initializer.initialize(mMap);
+
+		mMap.setBuildingsEnabled(false);
+
 		configureUI();
 	}
 
