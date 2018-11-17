@@ -19,12 +19,15 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
+import java.util.ArrayList;
 import java.util.Locale;
 import java.util.Random;
 
 import pg.pgapp.R;
+import pg.pgapp.activities.main.MapActivity;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.Building;
+import pg.pgapp.models.BuildingDisplay;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
@@ -38,6 +41,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
     TextView buildingFacultyTextView;
     TextView buildingAddressTextView;
     WebView buildingDescription;
+    BuildingDisplay.Coordinate center;
     byte[] serializedPicture;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,9 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 
 		setContentView(R.layout.activity_building_details);
 		initializeDetailView(savedInstanceState);
+
+		center = new DatabaseConnector().getBuildingDisplayModel(building.getBuildingDisplayId()).getCenter();
+
         ShowCase();
 	}
     @Override
@@ -169,6 +176,13 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
         }
         showcaseItem++;
     }
+
+	public void goTo(View v)
+	{
+        Intent mapIntent = new Intent(this, MapActivity.class);
+        mapIntent.putExtra("Coordinates", center);
+        startActivity(mapIntent);
+	}
 
 
 }

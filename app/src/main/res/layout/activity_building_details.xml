@@ -35,14 +35,36 @@
                 app:srcCompat="@drawable/common_full_open_on_phone"
                 tools:layout_editor_absoluteX="65dp"
                 tools:layout_editor_absoluteY="242dp" />
-
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="right"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_gravity="center"
                 android:text="25" />
 
+            <ImageButton
+                android:id="@+id/goToImageButton"
+                android:layout_width="150px"
+                android:layout_height="150px"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                android:onClick="goTo"
+                app:srcCompat="@android:drawable/ic_menu_mapmode" />
+
+            <ImageView
+                android:id="@+id/wikipediaImageView"
+                android:layout_width="150px"
+                android:layout_height="150px"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="20dp"
+                app:srcCompat="@drawable/wiki_white" />
+        </RelativeLayout>
             <TextView
                 android:id="@+id/buildingName"
                 android:layout_width="match_parent"
