@@ -1,5 +1,6 @@
 package pg.pgapp.models;
 
+import java.io.Serializable;
 import java.util.List;
 
 import lombok.AllArgsConstructor;
@@ -18,7 +19,7 @@ public class BuildingDisplay extends BaseModel {
 	@Getter
 	@Setter
 	@RequiredArgsConstructor
-	public class Coordinate {
+	public class Coordinate implements Serializable {
 		private final Double latitude;
 		private final Double longitude;
 	}
