@@ -1,11 +1,15 @@
 package pg.pgapp.activities.main;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.NavigationView;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -20,6 +24,8 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
+import java.util.Locale;
+
 import pg.pgapp.Initializer;
 import pg.pgapp.R;
 import pg.pgapp.activities.activities.ARActivity;
@@ -28,12 +34,14 @@ import pg.pgapp.activities.activities.SearchActivity;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback, NavigationView.OnNavigationItemSelectedListener {
 
+	private static final int MY_PERMISSIONS_REQUEST_ACCESS_LOCATION = 1;
 	private GoogleMap mMap;
 	private UiSettings mUiSettings;
 	private SharedPreferences preferences;
+	private DrawerLayout drawer;
+	private boolean locationPermissionGranted = false;
 	private final SharedPreferences.OnSharedPreferenceChangeListener listener =
 			(prefs, key) -> configureUI();
-	private DrawerLayout drawer;
 
 	public static SupportMapFragment newInstance() {
 		Bundle args = new Bundle();
@@ -63,8 +71,27 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		this.preferences = PreferenceManager.getDefaultSharedPreferences(this);
 		String newTheme = preferences.getString("text_size", null);
 		setTheme(getNewTheme(newTheme));
+		String language = preferences.getString("language", null);
+		setLanguageForApp(language);
+
+		checkPermissions();
 
 		initializeDrawer();
+	}
+
+	public void setLanguageForApp(String languageToLoad) {
+		Locale locale;
+		if (languageToLoad == null || languageToLoad.equals("not-set")) {
+			locale = Locale.getDefault();
+		} else {
+			locale = new Locale(languageToLoad);
+		}
+		Locale.setDefault(locale);
+		Configuration config = new Configuration();
+		config.setLocale(locale);
+
+		getBaseContext().getResources().updateConfiguration(config,
+				getBaseContext().getResources().getDisplayMetrics());
 	}
 
 	@Override
@@ -96,11 +123,12 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mUiSettings.setZoomControlsEnabled(isSet("UI_settings_zoom"));
 		mUiSettings.setCompassEnabled(isSet("UI_settings_compass"));
 		mUiSettings.setMyLocationButtonEnabled(isSet("UI_settings_my_location"));
-		mMap.setMyLocationEnabled(isSet("UI_settings_my_location"));
 		mUiSettings.setScrollGesturesEnabled(isSet("gesture_setting_scroll") && isSet("general_gesture_settings"));
 		mUiSettings.setZoomGesturesEnabled(isSet("gesture_setting_zoom") && isSet("general_gesture_settings"));
 		mUiSettings.setTiltGesturesEnabled(isSet("gesture_setting_tilt") && isSet("general_gesture_settings"));
 		mUiSettings.setRotateGesturesEnabled(isSet("gesture_setting_rotate") && isSet("general_gesture_settings"));
+
+		mMap.setMyLocationEnabled(locationPermissionGranted);
 	}
 
 	private boolean isSet(String tag) {
@@ -110,14 +138,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	private void initializeDrawer() {
 		drawer = findViewById(R.id.drawer_layout);
 		ImageButton button = findViewById(R.id.menuImageButton);
-		button.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-				drawerLayout.openDrawer(GravityCompat.START);
-			}
+		button.setOnClickListener(v -> {
+			DrawerLayout drawerLayout = drawer;
+			drawerLayout.openDrawer(GravityCompat.START);
 		});
-		NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+		NavigationView navigationView = findViewById(R.id.nav_view);
 		navigationView.setNavigationItemSelectedListener(this);
 	}
 
@@ -156,8 +181,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		return true;
 	}
 
+	@Override
+	public void onRequestPermissionsResult(int requestCode,
+										   String permissions[], int[] grantResults) {
+		switch (requestCode) {
+			case MY_PERMISSIONS_REQUEST_ACCESS_LOCATION: {
+				// If request is cancelled, the result arrays are empty.
+				if (grantResults.length > 0
+						&& grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+					locationPermissionGranted = true;
+				} else {
+					locationPermissionGranted = false;
+				}
+				return;
+			}
+		}
+	}
+
 	public void OpenMenu(View view) {
-		DrawerLayout drawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+		DrawerLayout drawerLayout = findViewById(R.id.drawer_layout);
 		drawerLayout.openDrawer(GravityCompat.START);
+	}
+
+	private void checkPermissions() {
+		if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED
+				&& ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
+		} else {
+			locationPermissionGranted = true;
+		}
 	}
 }
