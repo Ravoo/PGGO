@@ -74,6 +74,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		drawerMenuButton = (ImageButton)findViewById(R.id.menuImageButton);
 		initializeDrawer();
 
+
 		ShowCase();
 	}
 	public void ShowCase()
@@ -95,6 +96,9 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		mMap = googleMap;
 		Initializer initializer = new Initializer(this);
 		initializer.initialize(mMap);
+
+		mMap.setBuildingsEnabled(false);
+
 		configureUI();
 	}
 

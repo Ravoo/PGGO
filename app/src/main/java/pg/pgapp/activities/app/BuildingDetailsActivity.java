@@ -88,21 +88,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 		String dataString = String.format(Locale.US, justifyTag, building.getDescription());
 		buildingDescription.loadDataWithBaseURL("", dataString, "text/html", "UTF-8", "");
 
-
-
-//		if(savedInstanceState != null) {
-//            byte[] pic = savedInstanceState.getByteArray("pic");
-//            serializedPicture = pic;
-//            Bitmap decodedByte = BitmapFactory.decodeByteArray(pic, 0, pic.length);
-//            imageView.setImageBitmap(decodedByte);
-//            imageView.setVisibility(View.VISIBLE);
-//            ProgressBar progressBar = findViewById(R.id.progressBar1);
-//            progressBar.setVisibility(View.GONE);
-//        }else
-//        {
-	       new PictureDownloader().execute();
-//        }
-
+		new PictureDownloader().execute();
 	}
 
 	public void changeActivity(View view) {
@@ -139,7 +125,10 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
     ShowcaseView showcaseView;
 	private void ShowCase()
     {
-        showcaseView = new ShowcaseView.Builder(this)
+
+    	long singleShot = 19; //Dzięki tej liczbie showcase wykona się tylko raz, na zainstalowanie aplikacji
+
+        showcaseView = new ShowcaseView.Builder(this)//.singleShot(singleShot)
                 .setTarget(Target.NONE)
                 .setOnClickListener(this)
                 .setContentTitle("Detale budynku")
@@ -150,7 +139,7 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
         showcaseView.setButtonText("Ok!");
     }
 
-    //Żeby nie trzeba było klikać "OK", teraz wystarczy tapnięcie w ekran i showcase przeskakuje na kolejny element
+
     @Override
     public void onClick(View v) {
 
