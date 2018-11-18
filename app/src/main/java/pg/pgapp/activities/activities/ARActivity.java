@@ -1,6 +1,7 @@
 package pg.pgapp.activities.activities;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
@@ -29,11 +30,15 @@ import java.util.concurrent.ExecutionException;
 
 import pg.pgapp.R;
 import pg.pgapp.ar.DemoUtils;
+import pg.pgapp.models.BuildingDisplay;
 import uk.co.appoly.arcorelocation.LocationMarker;
 import uk.co.appoly.arcorelocation.LocationScene;
+import uk.co.appoly.arcorelocation.rendering.LocationNode;
 import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper;
 
 public class ARActivity extends AppCompatActivity {
+	private static final int DISPLAYED_BUILDINGS = 3;
+
 	private boolean installRequested;
 	private boolean hasFinishedLoading = false;
 
@@ -42,13 +47,15 @@ public class ARActivity extends AppCompatActivity {
 	private ArSceneView arSceneView;
 
 	// Renderables for this example
-	private ModelRenderable andyRenderable;
 	private List<ViewRenderable> layoutsRenderable = new ArrayList<>();
 
 	// Our ARCore-Location scene
 	private LocationScene locationScene;
 
-	private Coordinate destination;
+	private BuildingDisplay.Coordinate destination;
+	private String destinationName;
+
+	private boolean isGoToEnabled = false;
 
 
 	@Override
@@ -59,23 +66,20 @@ public class ARActivity extends AppCompatActivity {
 		setContentView(R.layout.activity_sceneform);
 		arSceneView = findViewById(R.id.ar_scene_view);
 
+		Intent intent = getIntent();
+		if(intent.hasExtra("Coordinates"))
+		{
+			isGoToEnabled = true;
+			destination = (BuildingDisplay.Coordinate) intent.getSerializableExtra("Coordinates");
+			destinationName = intent.getStringExtra("BuildingName");
+		} else {
+			isGoToEnabled = false;
+		}
+
         List<Coordinate> buildingsCoords = Arrays.asList(new Coordinate(54.371696, 18.612375), new Coordinate(54.370910, 18.613070), new Coordinate(54.371649, 18.614504));
 
-		// Build a renderable from a 2D View.
-		/*CompletableFuture<ViewRenderable> exampleLayout =
-				ViewRenderable.builder()
-						.setView(this, R.layout.example_layout)
-						.build();*/
-
-		/*CompletableFuture[] layouts = new CompletableFuture[buildingsCoords.size()];
-		for (int i = 0; i < buildingsCoords.size(); i++) {
-		    layouts[i] = ViewRenderable.builder()
-                    .setView(this, R.layout.example_layout)
-                    .build();
-        }*/
-
 		List<CompletableFuture<ViewRenderable>> layouts = new ArrayList<>();
-		for (Coordinate coords : buildingsCoords) {
+		for (int i = 0; i < DISPLAYED_BUILDINGS; i++) {
 		    layouts.add(ViewRenderable.builder()
                 .setView(this, R.layout.example_layout)
                 .build()
@@ -91,8 +95,7 @@ public class ARActivity extends AppCompatActivity {
 		CompletableFuture.allOf(
                 layouts.get(0),
 				layouts.get(1),
-				layouts.get(2),
-				andy)
+				layouts.get(2))
 				.handle(
 						(notUsed, throwable) -> {
 							// When you build a Renderable, Sceneform loads its resources in the background while
@@ -108,7 +111,6 @@ public class ARActivity extends AppCompatActivity {
 							    layoutsRenderable.add(layouts.get(0).get());
                                 layoutsRenderable.add(layouts.get(1).get());
                                 layoutsRenderable.add(layouts.get(2).get());
-								andyRenderable = andy.get();
 								hasFinishedLoading = true;
 
 							} catch (InterruptedException | ExecutionException ex) {
@@ -132,10 +134,12 @@ public class ARActivity extends AppCompatActivity {
 								// If our locationScene object hasn't been setup yet, this is a good time to do it
 								// We know that here, the AR components have been initiated.
 								locationScene = new LocationScene(this, this, arSceneView);
+//                                locationScene.setAnchorRefreshInterval(60);
+//                                locationScene.setMinimalRefreshing(true);
 
 								// Now lets create our location markers.
 								// First, a layout
-
+/*
 								for (Coordinate coords : buildingsCoords) {
 									LocationMarker layoutLocationMarker = new LocationMarker(
 											coords.longitude,
@@ -145,15 +149,63 @@ public class ARActivity extends AppCompatActivity {
 
 									// An example "onRender" event, called every frame
 									// Updates the layout with the markers distance
-                                    layoutLocationMarker.setRenderEvent(node -> {
-                                        View eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
-                                        TextView distanceTextView = eView.findViewById(R.id.textView);
+                                    layoutLocationMarker.setRenderEvent((LocationNode node) -> {
+
+                                    	View eView;
+                                    	if (isGoToEnabled) {
+											eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
+										} else {
+											eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
+										}
+										TextView distanceTextView = eView.findViewById(R.id.textView);
                                         distanceTextView.setText(node.getDistance() + " m");
                                     });
 									// Adding the marker
 									locationScene.mLocationMarkers.add(layoutLocationMarker);
-								}
+								}*/
 							}
+
+							if (isGoToEnabled) {
+								LocationMarker layoutLocationMarker = new LocationMarker(
+										destination.getLongitude(),
+										destination.getLatitude(),
+										getExampleView(0)
+								);
+
+								System.out.println("DESTINATION:");
+								System.out.println("LAT: " + layoutLocationMarker.latitude);
+								System.out.println("LONG: " + layoutLocationMarker.longitude);
+								System.out.println(destinationName);
+
+								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
+									View eView = layoutsRenderable.get(0).getView();
+									TextView distanceTextView = eView.findViewById(R.id.textView);
+									distanceTextView.setText(node.getDistance() + " m");
+									Toast.makeText(
+											this, "Prowadzę do: " + destinationName, Toast.LENGTH_LONG)
+											.show();
+								});
+
+								locationScene.mLocationMarkers.add(layoutLocationMarker);
+							}
+/*
+							for (Coordinate coords : buildingsCoords) {
+								LocationMarker layoutLocationMarker = new LocationMarker(
+										coords.longitude,
+										coords.latitude,
+										getExampleView(buildingsCoords.indexOf(coords))
+								);
+
+								// An example "onRender" event, called every frame
+								// Updates the layout with the markers distance
+								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
+									View eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
+									TextView distanceTextView = eView.findViewById(R.id.textView);
+									distanceTextView.setText(node.getDistance() + " m");
+								});
+								// Adding the marker
+								locationScene.mLocationMarkers.add(layoutLocationMarker);
+							}*/
 
 							Frame frame = arSceneView.getArFrame();
 							if (frame == null) {
@@ -200,23 +252,6 @@ public class ARActivity extends AppCompatActivity {
 			return false;
 		});
 
-		return base;
-	}
-
-	/***
-	 * Example Node of a 3D model
-	 *
-	 * @return
-	 */
-	private Node getAndy() {
-		Node base = new Node();
-		base.setRenderable(andyRenderable);
-		Context c = this;
-		base.setOnTapListener((v, event) -> {
-			Toast.makeText(
-					c, "Andy touched.", Toast.LENGTH_LONG)
-					.show();
-		});
 		return base;
 	}
 
@@ -278,6 +313,7 @@ public class ARActivity extends AppCompatActivity {
 	public void onDestroy() {
 		super.onDestroy();
 		arSceneView.destroy();
+		isGoToEnabled = false;
 	}
 
 	@Override

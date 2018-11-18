@@ -19,17 +19,13 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
-import java.util.ArrayList;
 import java.util.Locale;
-import java.util.Random;
 
 import pg.pgapp.R;
-import pg.pgapp.activities.main.MapActivity;
+import pg.pgapp.activities.activities.ARActivity;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.Building;
 import pg.pgapp.models.BuildingDisplay;
-import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
-import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
 
 
 public class BuildingDetailsActivity extends AppCompatActivity implements View.OnClickListener{
@@ -179,9 +175,10 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 
 	public void goTo(View v)
 	{
-        Intent mapIntent = new Intent(this, MapActivity.class);
-        mapIntent.putExtra("Coordinates", center);
-        startActivity(mapIntent);
+        Intent arIntent = new Intent(this, ARActivity.class);
+        arIntent.putExtra("Coordinates", center);
+        arIntent.putExtra("BuildingName", building.getName());
+        startActivity(arIntent);
 	}
 
 
