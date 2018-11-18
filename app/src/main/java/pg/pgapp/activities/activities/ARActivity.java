@@ -140,7 +140,7 @@ public class ARActivity extends AppCompatActivity {
 								// If our locationScene object hasn't been setup yet, this is a good time to do it
 								// We know that here, the AR components have been initiated.
 								locationScene = new LocationScene(this, this, arSceneView);
-//                                locationScene.setAnchorRefreshInterval(60);
+                                locationScene.setAnchorRefreshInterval(10);
 //                                locationScene.setMinimalRefreshing(true);
 							}
 
