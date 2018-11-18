@@ -65,6 +65,8 @@ public class ARActivity extends AppCompatActivity {
 
 	private boolean isGoToEnabled = false;
 
+	private float lastFrame = 0;
+
 
 	@Override
 	@SuppressWarnings({"AndroidApiChecker", "FutureReturnValueIgnored"})
@@ -136,6 +138,9 @@ public class ARActivity extends AppCompatActivity {
 								return;
 							}
 
+							if (lastFrame == 0)
+							    lastFrame = frameTime.getStartSeconds();
+
 							if (locationScene == null) {
 								// If our locationScene object hasn't been setup yet, this is a good time to do it
 								// We know that here, the AR components have been initiated.
@@ -168,7 +173,8 @@ public class ARActivity extends AppCompatActivity {
                                 goToSnackbar(destinationName);
 
 								locationScene.mLocationMarkers.add(layoutLocationMarker);
-							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()){
+							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()
+                                    && frameTime.getStartSeconds() > lastFrame + 10){
 							    System.out.println("TRYB: EKSPLORACJA");
 
 							    hideSnackbar();
