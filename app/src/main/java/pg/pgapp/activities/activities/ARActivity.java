@@ -49,6 +49,7 @@ public class ARActivity extends AppCompatActivity {
 	private boolean hasFinishedLoading = false;
 
 	private Snackbar loadingMessageSnackbar = null;
+	private Snackbar goToSnackbar = null;
 
 	private ArSceneView arSceneView;
 
@@ -147,9 +148,7 @@ public class ARActivity extends AppCompatActivity {
 //                                locationScene.setMinimalRefreshing(true);
 							}
 
-							locationScene.mLocationMarkers = new ArrayList<>();
-
-							if (isGoToEnabled) {
+							if (isGoToEnabled && locationScene.mLocationMarkers.isEmpty()) {
                                 System.out.println("TRYB: GO TO");
 								LocationMarker layoutLocationMarker = new LocationMarker(
 										destination.getLongitude(),
@@ -166,16 +165,20 @@ public class ARActivity extends AppCompatActivity {
 									View eView = layoutsRenderable.get(0).getView();
 									TextView distanceTextView = eView.findViewById(R.id.textView);
 									distanceTextView.setText(node.getDistance() + " m");
-									Toast.makeText(
-											this, "Prowadzę do: " + destinationName, Toast.LENGTH_LONG)
-											.show();
 
 									System.out.println("Prowadzę do: " + destinationName);
 								});
 
+                                goToSnackbar(destinationName);
+
 								locationScene.mLocationMarkers.add(layoutLocationMarker);
-							} else {
+							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()){
 							    System.out.println("TRYB: EKSPLORACJA");
+							    goToSnackbar.dismiss();
+                                goToSnackbar = null;
+
+								locationScene.mLocationMarkers = new ArrayList<>();
+
 							    if (allBuildingsDisplays == null) {
                                     getBuildingsNearby();
                                 }
@@ -392,6 +395,20 @@ public class ARActivity extends AppCompatActivity {
 		loadingMessageSnackbar.dismiss();
 		loadingMessageSnackbar = null;
 	}*/
+
+	private void goToSnackbar(String buildingName) {
+        if (goToSnackbar != null && goToSnackbar.isShownOrQueued()) {
+            return;
+        }
+
+        goToSnackbar =
+                Snackbar.make(
+                        ARActivity.this.findViewById(android.R.id.content),
+                        "Prowadzę do: " + buildingName,
+                        Snackbar.LENGTH_INDEFINITE);
+        goToSnackbar.getView().setBackgroundColor(0xbf323232);
+        goToSnackbar.show();
+    }
 
     private void getBuildingsNearby() {
 	    if (allBuildingsDisplays == null || allBuildingsDisplays.isEmpty()) {
