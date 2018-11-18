@@ -1,6 +1,5 @@
 package pg.pgapp.activities.activities;
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -48,7 +47,6 @@ public class ARActivity extends AppCompatActivity {
 	private boolean installRequested;
 	private boolean hasFinishedLoading = false;
 
-	private Snackbar loadingMessageSnackbar = null;
 	private Snackbar goToSnackbar = null;
 
 	private ArSceneView arSceneView;
@@ -85,8 +83,6 @@ public class ARActivity extends AppCompatActivity {
 		} else {
 			isGoToEnabled = false;
 		}
-
-//        List<Coordinate> buildingsCoords = Arrays.asList(new Coordinate(54.371696, 18.612375), new Coordinate(54.370910, 18.613070), new Coordinate(54.371649, 18.614504));
 
 		List<CompletableFuture<ViewRenderable>> layouts = new ArrayList<>();
 		for (int i = 0; i < DISPLAYED_BUILDINGS; i++) {
@@ -174,8 +170,8 @@ public class ARActivity extends AppCompatActivity {
 								locationScene.mLocationMarkers.add(layoutLocationMarker);
 							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()){
 							    System.out.println("TRYB: EKSPLORACJA");
-							    goToSnackbar.dismiss();
-                                goToSnackbar = null;
+
+							    hideSnackbar();
 
 								locationScene.mLocationMarkers = new ArrayList<>();
 
@@ -241,14 +237,6 @@ public class ARActivity extends AppCompatActivity {
 							if (locationScene != null) {
 								locationScene.processFrame(frame);
 							}
-
-							/*if (loadingMessageSnackbar != null) {
-								for (Plane plane : frame.getUpdatedTrackables(Plane.class)) {
-									if (plane.getTrackingState() == TrackingState.TRACKING) {
-										hideLoadingMessage();
-									}
-								}
-							}*/
 						});
 
 
@@ -264,7 +252,7 @@ public class ARActivity extends AppCompatActivity {
 	private Node getExampleView(int layoutIndex) {
 		Node base = new Node();
 		base.setRenderable(layoutsRenderable.get(layoutIndex));
-		Context c = this;
+		/*Context c = this;
 		// Add  listeners etc here
 		View eView = layoutsRenderable.get(layoutIndex).getView();
 		eView.setOnTouchListener((v, event) -> {
@@ -272,7 +260,7 @@ public class ARActivity extends AppCompatActivity {
 					c, "Location marker touched.", Toast.LENGTH_LONG)
 					.show();
 			return false;
-		});
+		});*/
 
 		return base;
 	}
@@ -372,30 +360,6 @@ public class ARActivity extends AppCompatActivity {
 		}
 	}
 
-	//TODO: do usunięcia
-	/*private void showLoadingMessage() {
-		if (loadingMessageSnackbar != null && loadingMessageSnackbar.isShownOrQueued()) {
-			return;
-		}
-
-		loadingMessageSnackbar =
-				Snackbar.make(
-						ARActivity.this.findViewById(android.R.id.content),
-                        R.string.plane_finding,
-						Snackbar.LENGTH_INDEFINITE);
-		loadingMessageSnackbar.getView().setBackgroundColor(0xbf323232);
-		loadingMessageSnackbar.show();
-	}
-
-	private void hideLoadingMessage() {
-		if (loadingMessageSnackbar == null) {
-			return;
-		}
-
-		loadingMessageSnackbar.dismiss();
-		loadingMessageSnackbar = null;
-	}*/
-
 	private void goToSnackbar(String buildingName) {
         if (goToSnackbar != null && goToSnackbar.isShownOrQueued()) {
             return;
@@ -404,10 +368,19 @@ public class ARActivity extends AppCompatActivity {
         goToSnackbar =
                 Snackbar.make(
                         ARActivity.this.findViewById(android.R.id.content),
-                        "Prowadzę do: " + buildingName,
+                        "Prowadzę do: " + buildingName + "\n",
                         Snackbar.LENGTH_INDEFINITE);
         goToSnackbar.getView().setBackgroundColor(0xbf323232);
         goToSnackbar.show();
+    }
+
+    private void hideSnackbar() {
+        if (goToSnackbar == null) {
+            return;
+        }
+
+        goToSnackbar.dismiss();
+        goToSnackbar = null;
     }
 
     private void getBuildingsNearby() {
