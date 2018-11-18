@@ -26,23 +26,14 @@ import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Random;
-import java.util.SortedMap;
-import java.util.TreeMap;
-import java.util.stream.Collectors;
 
 import pg.pgapp.Initializer;
 import pg.pgapp.R;
 import pg.pgapp.activities.activities.ARActivity;
 import pg.pgapp.activities.activities.OptionsActivity;
 import pg.pgapp.activities.activities.SearchActivity;
-import pg.pgapp.database.DatabaseConnector;
-import pg.pgapp.models.Building;
 import pg.pgapp.models.BuildingDisplay;
 import uk.co.deanwild.materialshowcaseview.MaterialShowcaseSequence;
 import uk.co.deanwild.materialshowcaseview.ShowcaseConfig;
@@ -91,8 +82,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 		setLanguageForApp(language);
 
 		checkPermissions();
-
-		getBuildingsNearby();
 
 		drawerMenuButton = (ImageButton)findViewById(R.id.menuImageButton);
 		initializeDrawer();
@@ -260,85 +249,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 			ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION}, MY_PERMISSIONS_REQUEST_ACCESS_LOCATION);
 		} else {
 			locationPermissionGranted = true;
-		}
-	}
-
-
-	//////////////////////////////////
-
-	private Map<Long, BuildingDisplay> allBuildingsDisplays;
-	private List<BuildingDisplay> buildingDisplaysNearby;
-	private Map<Long, Building> buildingsNearby = new HashMap<>(8);
-
-	private void getBuildingsNearby() {
-		if (allBuildingsDisplays == null || allBuildingsDisplays.isEmpty()) {
-			getAllBuildingDisplays();
-		}
-
-		SortedMap<Long, Double> distanceToBuildingById = new TreeMap<>();
-
-		double deviceLatitude = 54.371591;
-		double deviceLongitude = 18.613020;
-		Coordinate deviceLocation = new Coordinate(deviceLatitude, deviceLongitude);
-
-		for (BuildingDisplay buildingDisplay : allBuildingsDisplays.values()) {
-			distanceToBuildingById.put(buildingDisplay.getId(), calculateDistance(deviceLocation, buildingDisplay.getCenter()));
-		}
-
-		List<Long> buildingDisplaysNearbyIds =
-				distanceToBuildingById.entrySet().stream()
-						.sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
-						.mapToLong(e -> e.getKey())
-						.boxed()
-						.limit(3)
-						.collect(Collectors.toList());
-
-		getBuildingData(buildingDisplaysNearbyIds);
-		getBuildingData(buildingDisplaysNearbyIds);
-	}
-
-	private void getBuildingData(List<Long> buildingDisplaysIds) {
-		Map<Long, Boolean> cachedBuildings = new HashMap<>();
-		buildingsNearby.keySet().forEach(k -> cachedBuildings.put(k, false));
-
-		for (Long buildingDisplayId : buildingDisplaysIds) {
-			BuildingDisplay buildingDisplay = allBuildingsDisplays.get(buildingDisplayId);
-			Long buildingId = buildingDisplay.getBuildingId();
-
-			if (cachedBuildings.containsKey(buildingId)) {
-				cachedBuildings.put(buildingId, true);
-			} else {
-				Building buildingToCache = new DatabaseConnector().getBuildingModel(buildingId);
-				buildingsNearby.put(buildingToCache.getId(), buildingToCache);
-			}
-		}
-
-		for (Map.Entry<Long, Boolean> cachedBuilding : cachedBuildings.entrySet()) {
-			if (!cachedBuilding.getValue()) { // jeżeli flaga dla budynku nie została zaktualizowana, budynek nie jest już wyświetlany
-				buildingsNearby.remove(cachedBuilding.getKey());
-			}
-		}
-	}
-
-	private Double calculateDistance(Coordinate deviceLocation, BuildingDisplay.Coordinate buildingLocation) {
-		return Math.pow(deviceLocation.latitude - buildingLocation.getLatitude(), 2) +
-				Math.pow(deviceLocation.longitude - buildingLocation.getLongitude(), 2);
-	}
-
-	private void getAllBuildingDisplays() {
-		List<BuildingDisplay> displays = new DatabaseConnector().getBuildingDisplays();
-		allBuildingsDisplays = new HashMap<>();
-		displays.stream()
-				.forEach(d -> allBuildingsDisplays.put(d.getId(), d));
-	}
-
-	private class Coordinate {
-		double latitude;
-		double longitude;
-
-		Coordinate (double lat, double lon) {
-			latitude = lat;
-			longitude = lon;
 		}
 	}
 }
