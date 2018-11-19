@@ -2,8 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:alpha="0.93"
-    android:background="#0425a7"
+    android:alpha="0.70"
+    android:background="#031A75"
     android:orientation="vertical"
     android:padding="30dp">
 
@@ -11,13 +11,5 @@
         android:id="@+id/textView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Nowe ETI"
         android:textColor="#fff" />
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="#fff"
-        android:textSize="24sp" />
 </LinearLayout>

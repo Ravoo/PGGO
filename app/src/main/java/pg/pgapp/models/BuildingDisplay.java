@@ -11,7 +11,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class BuildingDisplay extends BaseModel {
+public class BuildingDisplay extends BaseModel implements Serializable {
 	private Long buildingId;
 	private List<Coordinate> coordinates;
 	private Coordinate center;
