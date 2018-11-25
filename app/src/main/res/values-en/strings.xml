@@ -58,4 +58,8 @@
     <string name="pg_guide_title">Gdańsk University Of Technology Guide</string>
     <string name="pg_guide_subtitle">Engineering Thesis 2018/2019</string>
 
+    <string name="small_text_size">Small</string>
+    <string name="medium_text_size">Medium</string>
+    <string name="large_text_size">Large</string>
+
 </resources>

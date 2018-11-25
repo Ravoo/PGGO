@@ -18,6 +18,7 @@ import android.support.v7.preference.SwitchPreferenceCompat;
 import java.util.Locale;
 
 import pg.pgapp.R;
+import pg.pgapp.activities.main.MapActivity;
 
 // todo replace with activity, not activity with fragment
 public class OptionsActivity extends AppCompatActivity {
@@ -34,11 +35,13 @@ public class OptionsActivity extends AppCompatActivity {
 		mPager.setCurrentItem(0);
 
 		mPager.requestTransparentRegion(mPager);
+		String newTheme = PreferenceManager.getDefaultSharedPreferences(this).getString("text_size", null);
+		setTheme(MapActivity.getNewTheme(newTheme));
 	}
 
 	public static class OptionsFragment extends PreferenceFragmentCompat {
 		PreferenceManager preferenceManager;
-		private Preference.OnPreferenceChangeListener reloadActivityListener = (preference, newValue) -> {
+		private Preference.OnPreferenceChangeListener changeTextSizeListener = (preference, newValue) -> {
 			reloadActivity();
 			return true;
 		};
@@ -53,7 +56,6 @@ public class OptionsActivity extends AppCompatActivity {
 		};
 		private Preference.OnPreferenceChangeListener languageListener = (preference, newValue) -> {
 			setLanguageForApp(newValue.toString());
-			reloadActivity();
 			return true;
 		};
 
@@ -90,7 +92,7 @@ public class OptionsActivity extends AppCompatActivity {
 			language.setOnPreferenceChangeListener(languageListener);
 
 			final ListPreference textSize = (ListPreference) preferenceManager.findPreference("text_size");
-			textSize.setOnPreferenceChangeListener(reloadActivityListener);
+			textSize.setOnPreferenceChangeListener(changeTextSizeListener);
 		}
 	}
 

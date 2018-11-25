@@ -57,4 +57,8 @@
     <string name="pg_guide_title">Przewodnik po PG</string>
     <string name="pg_guide_subtitle">Projekt inżynierski 2018/2019</string>
 
+    <string name="small_text_size">Mały</string>
+    <string name="medium_text_size">Średni</string>
+    <string name="large_text_size">Duży</string>
+
 </resources>
