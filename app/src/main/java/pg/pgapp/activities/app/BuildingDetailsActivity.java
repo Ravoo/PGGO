@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -26,6 +27,7 @@ import pg.pgapp.activities.activities.ARActivity;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.Building;
 import pg.pgapp.models.BuildingDisplay;
+import pg.pgapp.models.Tag;
 
 
 public class BuildingDetailsActivity extends AppCompatActivity implements View.OnClickListener{
@@ -33,11 +35,13 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
     int showcaseItem = 0;
 	Building building;
     ImageView imageView;
+    ImageView wikipediaImageView;
     TextView buildingNameTextView;
     TextView buildingFacultyTextView;
     TextView buildingAddressTextView;
     WebView buildingDescription;
     BuildingDisplay.Coordinate center;
+
     byte[] serializedPicture;
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -90,7 +94,17 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 		String dataString = String.format(Locale.US, justifyTag, building.getDescription());
 		buildingDescription.loadDataWithBaseURL("", dataString, "text/html", "UTF-8", "");
 
+		wikipediaImageView = findViewById(R.id.wikipediaImageView);
+		checkIfDepartment();
+
 		new PictureDownloader().execute();
+	}
+
+	private void checkIfDepartment() {
+    	Tag tag = building.getTag();
+    	if(tag == Tag.OTHER){
+    		wikipediaImageView.setVisibility(View.INVISIBLE);
+		}
 	}
 
 	public void changeActivity(View view) {
@@ -179,6 +193,28 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
         arIntent.putExtra("Coordinates", center);
         arIntent.putExtra("BuildingName", building.getName());
         startActivity(arIntent);
+	}
+
+	public void redirectToWikipedia(View v)
+	{
+		String path = "http://www.google.com";
+		Tag tag = building.getTag();
+		switch (tag)
+		{
+			case CHEM: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Chemiczny_Politechniki_Gda%C5%84skiej"; break;
+			case ETI: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Elektroniki,_Telekomunikacji_i_Informatyki_Politechniki_Gda%C5%84skiej"; break;
+			case EIA: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Elektrotechniki_i_Automatyki_Politechniki_Gda%C5%84skiej"; break;
+			case ILIS: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_In%C5%BCynierii_L%C4%85dowej_i_%C5%9Arodowiska_Politechniki_Gda%C5%84skiej"; break;
+			case MECH: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Mechaniczny_Politechniki_Gda%C5%84skiej"; break;
+			case OIO: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Oceanotechniki_i_Okr%C4%99townictwa_Politechniki_Gda%C5%84skiej"; break;
+			case ZIE: path = "https://pl.wikipedia.org/wiki/Wydzia%C5%82_Zarz%C4%85dzania_i_Ekonomii_Politechniki_Gda%C5%84skiej"; break;
+			case NANO:
+			default: path = "https://pl.wikipedia.org/wiki/Politechnika_Gda%C5%84ska";
+		}
+
+
+		Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(path));
+		startActivity(browserIntent);
 	}
 
 

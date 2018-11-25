@@ -4,8 +4,11 @@ import android.content.Context;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.GroundOverlay;
+import com.google.android.gms.maps.model.GroundOverlayOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polygon;
 import com.google.android.gms.maps.model.PolygonOptions;
@@ -18,6 +21,7 @@ import lombok.NonNull;
 import pg.pgapp.database.DatabaseConnector;
 import pg.pgapp.models.BuildingDisplay;
 import pg.pgapp.models.POI;
+import pg.pgapp.models.Type;
 
 public class Initializer {
 
@@ -46,17 +50,22 @@ public class Initializer {
 		ArrayList<POI> pois = new DatabaseConnector().getPOIs();
 		if (pois != null) {
 			pois.forEach(poi -> {
-				CircleOptions poiOptions = new CircleOptions()
-						.center(new LatLng(poi.getCoordinate().getLatitude(), poi.getCoordinate().getLongitude()))
-						.strokeColor(poi.getModelColor())
-						.fillColor(poi.getModelColor())
-						.strokeWidth(5)
-						.radius(3);
-				Circle circle = mMap.addCircle(poiOptions);
-				circle.setClickable(true);
+				LatLng poiPosition = new LatLng(poi.getCoordinate().getLatitude(), poi.getCoordinate().getLongitude());
+				Type poiType = poi.getType();
+				int poiIcon = 0;
+				switch(poiType){
+					case RESTAURANT: poiIcon = R.drawable.restaurant; break;
+					case BIKE_PARK: poiIcon = R.drawable.bike_stop; break;
+					case BUS_STOP: poiIcon = R.drawable.bus_stop; break;
+					case ATM: poiIcon = R.drawable.atm; break;
+				}
+				GroundOverlay iconOverlay =  mMap.addGroundOverlay(new GroundOverlayOptions()
+						.image(BitmapDescriptorFactory.fromResource(poiIcon))
+						.position(poiPosition,4));
+				iconOverlay.setClickable(true);
+				iconOverlay.setTag(poi.getName());
 			});
-			mMap.setOnCircleClickListener(new OnCircleClickListener(context));
-
+			mMap.setOnGroundOverlayClickListener(new OnGroundOverlayClickListener(context));
 		}
 		ArrayList<BuildingDisplay> buildings = new DatabaseConnector().getBuildingDisplays();
 		if (buildings != null) {
