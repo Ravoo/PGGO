@@ -83,7 +83,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 		checkPermissions();
 
-		drawerMenuButton = (ImageButton)findViewById(R.id.menuImageButton);
+		drawerMenuButton = findViewById(R.id.menuImageButton);
 		initializeDrawer();
 
 		ShowCase();
@@ -145,6 +145,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 	@Override
 	public void onResume() {
 		super.onResume();
+		String newTheme = preferences.getString("text_size", null);
+		setTheme(getNewTheme(newTheme));
+		String language = preferences.getString("language", null);
+		setLanguageForApp(language);
 		PreferenceManager.getDefaultSharedPreferences(this).registerOnSharedPreferenceChangeListener(listener);
 	}
 
