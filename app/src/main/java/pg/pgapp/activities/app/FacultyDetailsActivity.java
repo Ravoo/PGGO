@@ -17,6 +17,8 @@ import com.github.amlcurran.showcaseview.ShowcaseView;
 import com.github.amlcurran.showcaseview.targets.Target;
 import com.github.amlcurran.showcaseview.targets.ViewTarget;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -59,12 +61,14 @@ public class FacultyDetailsActivity extends AppCompatActivity implements Adapter
 
 		ArrayList<String> departmentsForSpinner = new ArrayList<>(faculty.getDepartmentsNames());
 		ArrayAdapter<String> adapter = new ArrayAdapter<>(this, R.layout.support_simple_spinner_dropdown_item, departmentsForSpinner);
+
 		spinner.setAdapter(adapter);
 		spinner.setOnItemSelectedListener(this);
 	}
 
 	@Override
 	public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+		((TextView)parent.getChildAt(0)).setTextColor(Color.WHITE);
 		departmentDescriptionTextView = findViewById(R.id.departmentDescription);
 		departmentDescriptionTextView.setBackgroundColor(getResources().getColor(R.color.colorPgSecondary));
 		//TextView selectedTV = findViewById(R.id.selectedTextView);

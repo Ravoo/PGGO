@@ -12,6 +12,7 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.webkit.WebView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -36,11 +37,13 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
 	Building building;
     ImageView imageView;
     ImageView wikipediaImageView;
+    ImageView arImageView;
     TextView buildingNameTextView;
     TextView buildingFacultyTextView;
     TextView buildingAddressTextView;
     WebView buildingDescription;
     BuildingDisplay.Coordinate center;
+    Button numberButton;
 
     byte[] serializedPicture;
     @Override
@@ -60,6 +63,9 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
         //outState.putByteArray("pic",serializedPicture);
     }
 	public void initializeDetailView(Bundle savedInstanceState) {
+
+    	arImageView = findViewById(R.id.goToImageButton);
+		numberButton = findViewById(R.id.numberButton);
         imageView = findViewById(R.id.buildingImageView);
 		imageView.setVisibility(View.GONE);
 
@@ -166,21 +172,36 @@ public class BuildingDetailsActivity extends AppCompatActivity implements View.O
                 showcaseView.setContentText("Wygląd opisywanego budynku");
                 break;
             case 1:
+                showcaseView.setShowcase(new ViewTarget(wikipediaImageView),true);
+                showcaseView.setContentTitle("Wikipedia");
+                showcaseView.setContentText("Odnośnik do strony w portalu Wikipedia dotyczący wydziału do którego należy budynek");
+                break;
+			case 2:
+				showcaseView.setShowcase(new ViewTarget(arImageView),true);
+				showcaseView.setContentTitle("Nawigacja");
+				showcaseView.setContentText("Nawiguj do wybranego budynku przy użyciu rzeczywistości rozszerzonej");
+				break;
+			case 3:
+				showcaseView.setShowcase(new ViewTarget(numberButton),true);
+				showcaseView.setContentTitle("Numer budynku");
+				//showcaseView.setContentText("Nawiguj do wybranego budynku przy użyciu rzeczywistości rozszerzonej");
+				break;
+			case 4:
                 showcaseView.setShowcase(new ViewTarget(buildingNameTextView),true);
                 showcaseView.setContentTitle("Nazwa budynku");
                 showcaseView.setContentText("Nazwa opisywanego budynku");
                 break;
-            case 2:
+            case 5:
                 showcaseView.setShowcase(new ViewTarget(buildingFacultyTextView),true);
                 showcaseView.setContentTitle("Nazwa wydziału");
                 showcaseView.setContentText("Nazwa wydziału, do którego należy budynek. Kliknij w nią aby dowiedzieć się więcej");
                 break;
-            case 3:
+            case 6:
                 showcaseView.setShowcase(new ViewTarget(buildingDescription),true);
                 showcaseView.setContentTitle("Opis");
                 showcaseView.setContentText("Krótki opis budynku");
                 break;
-            case 4:
+            case 7:
                 showcaseView.hide();
                 break;
         }

@@ -277,7 +277,6 @@ public class ARActivity extends AppCompatActivity {
 	@Override
 	protected void onResume() {
 		super.onResume();
-
 		if (locationScene != null) {
 			locationScene.resume();
 		}
