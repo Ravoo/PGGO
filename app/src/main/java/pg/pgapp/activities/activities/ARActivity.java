@@ -3,7 +3,6 @@ package pg.pgapp.activities.activities;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.WindowManager;
@@ -43,11 +42,10 @@ import uk.co.appoly.arcorelocation.utils.ARLocationPermissionHelper;
 
 public class ARActivity extends AppCompatActivity {
 	private static final int DISPLAYED_BUILDINGS = 3;
+	private static final int AR_REFRESH_TIME = 10;
 
 	private boolean installRequested;
 	private boolean hasFinishedLoading = false;
-
-	private Snackbar goToSnackbar = null;
 
 	private ArSceneView arSceneView;
 
@@ -139,13 +137,13 @@ public class ARActivity extends AppCompatActivity {
 							}
 
 							if (lastFrame == 0)
-							    lastFrame = frameTime.getStartSeconds();
+							    lastFrame = frameTime.getStartSeconds() - AR_REFRESH_TIME;
 
 							if (locationScene == null) {
 								// If our locationScene object hasn't been setup yet, this is a good time to do it
 								// We know that here, the AR components have been initiated.
 								locationScene = new LocationScene(this, this, arSceneView);
-                                locationScene.setAnchorRefreshInterval(10);
+                                locationScene.setAnchorRefreshInterval(AR_REFRESH_TIME);
 //                                locationScene.setMinimalRefreshing(true);
 							}
 
@@ -165,20 +163,19 @@ public class ARActivity extends AppCompatActivity {
 								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
 									View eView = layoutsRenderable.get(0).getView();
 									TextView distanceTextView = eView.findViewById(R.id.textView);
-									distanceTextView.setText(node.getDistance() + " m");
+									distanceTextView.setText(node.getDistance() + " m\n" + destinationName);
 
 									System.out.println("Prowadzę do: " + destinationName);
 								});
 
-                                goToSnackbar(destinationName);
-
 								locationScene.mLocationMarkers.add(layoutLocationMarker);
-							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()
-                                    && frameTime.getStartSeconds() > lastFrame + 10){
+							} else if (!isGoToEnabled && frameTime.getStartSeconds() > lastFrame + AR_REFRESH_TIME){
 							    System.out.println("TRYB: EKSPLORACJA");
 
-							    hideSnackbar();
+							    lastFrame = frameTime.getStartSeconds();
 
+							    locationScene.mLocationMarkers.stream()
+										.forEach(this::removeMarker);
 								locationScene.mLocationMarkers = new ArrayList<>();
 
 							    if (allBuildingsDisplays == null) {
@@ -212,24 +209,6 @@ public class ARActivity extends AppCompatActivity {
                                     locationScene.mLocationMarkers.add(layoutLocationMarker);
                                 }
                             }
-/*
-							for (Coordinate coords : buildingsCoords) {
-								LocationMarker layoutLocationMarker = new LocationMarker(
-										coords.longitude,
-										coords.latitude,
-										getExampleView(buildingsCoords.indexOf(coords))
-								);
-
-								// An example "onRender" event, called every frame
-								// Updates the layout with the markers distance
-								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
-									View eView = layoutsRenderable.get(buildingsCoords.indexOf(coords)).getView();
-									TextView distanceTextView = eView.findViewById(R.id.textView);
-									distanceTextView.setText(node.getDistance() + " m");
-								});
-								// Adding the marker
-								locationScene.mLocationMarkers.add(layoutLocationMarker);
-							}*/
 
 							Frame frame = arSceneView.getArFrame();
 							if (frame == null) {
@@ -366,28 +345,12 @@ public class ARActivity extends AppCompatActivity {
 		}
 	}
 
-	private void goToSnackbar(String buildingName) {
-        if (goToSnackbar != null && goToSnackbar.isShownOrQueued()) {
-            return;
-        }
-
-        goToSnackbar =
-                Snackbar.make(
-                        ARActivity.this.findViewById(android.R.id.content),
-                        "Prowadzę do: " + buildingName + "\n",
-                        Snackbar.LENGTH_INDEFINITE);
-        goToSnackbar.getView().setBackgroundColor(0xbf323232);
-        goToSnackbar.show();
-    }
-
-    private void hideSnackbar() {
-        if (goToSnackbar == null) {
-            return;
-        }
-
-        goToSnackbar.dismiss();
-        goToSnackbar = null;
-    }
+	public void removeMarker(LocationMarker locationMarker) {
+		locationScene.mLocationMarkers.remove(locationMarker);
+		locationMarker.anchorNode.getAnchor().detach();
+		locationMarker.anchorNode.setEnabled(false);
+		locationMarker.anchorNode = null;
+	}
 
     private void getBuildingsNearby() {
 	    if (allBuildingsDisplays == null || allBuildingsDisplays.isEmpty()) {
