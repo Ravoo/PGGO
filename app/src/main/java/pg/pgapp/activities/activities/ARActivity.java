@@ -187,9 +187,12 @@ public class ARActivity extends AppCompatActivity {
                                 buildingDisplayIdsToDisplay = new ArrayList<>();
 							    buildingsNearby.values().stream()
                                         .forEach(b -> buildingDisplayIdsToDisplay.add(b.getBuildingDisplayId()));
+								System.out.println("PRZEDFOR");
 
                                 for (Long buildingDisplayId : buildingDisplayIdsToDisplay) {
-                                    BuildingDisplay buildingDisplay = allBuildingsDisplays.get(buildingDisplayId);
+									System.out.println("FOR123");
+
+									BuildingDisplay buildingDisplay = allBuildingsDisplays.get(buildingDisplayId);
                                     LocationMarker layoutLocationMarker = new LocationMarker(
                                             buildingDisplay.getCenter().getLongitude(),
                                             buildingDisplay.getCenter().getLatitude(),
@@ -403,7 +406,7 @@ public class ARActivity extends AppCompatActivity {
             for (BuildingDisplay buildingDisplay : allBuildingsDisplays.values()) {
                 distanceToBuildingById.put(buildingDisplay.getId(), calculateDistance(deviceLocation, buildingDisplay.getCenter()));
             }
-
+			System.out.println("BUILDINGS NEARBY");
             List<Long> buildingDisplaysNearbyIds =
                     distanceToBuildingById.entrySet().stream()
                             .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
