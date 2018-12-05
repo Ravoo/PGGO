@@ -165,7 +165,7 @@ public class ARActivity extends AppCompatActivity {
 								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
 									View eView = layoutsRenderable.get(0).getView();
 									TextView distanceTextView = eView.findViewById(R.id.textView);
-									distanceTextView.setText(node.getDistance() + " m");
+									distanceTextView.setText(node.getDistance() + " m\n" + destinationName);
 
 									System.out.println("Prowadzę do: " + destinationName);
 								});
@@ -176,6 +176,8 @@ public class ARActivity extends AppCompatActivity {
 							} else if (!isGoToEnabled && locationScene.mLocationMarkers.isEmpty()
                                     && frameTime.getStartSeconds() > lastFrame + 10){
 							    System.out.println("TRYB: EKSPLORACJA");
+
+							    lastFrame = frameTime.getStartSeconds();
 
 							    hideSnackbar();
 
@@ -406,13 +408,13 @@ public class ARActivity extends AppCompatActivity {
             for (BuildingDisplay buildingDisplay : allBuildingsDisplays.values()) {
                 distanceToBuildingById.put(buildingDisplay.getId(), calculateDistance(deviceLocation, buildingDisplay.getCenter()));
             }
-			System.out.println("BUILDINGS NEARBY");
+
             List<Long> buildingDisplaysNearbyIds =
                     distanceToBuildingById.entrySet().stream()
                             .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
                             .mapToLong(Map.Entry::getKey)
                             .boxed()
-                            .limit(3)
+                            .limit(DISPLAYED_BUILDINGS)
                             .collect(Collectors.toList());
 
             getBuildingData(buildingDisplaysNearbyIds);
