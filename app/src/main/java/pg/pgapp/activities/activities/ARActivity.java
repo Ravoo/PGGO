@@ -165,7 +165,7 @@ public class ARActivity extends AppCompatActivity {
 								layoutLocationMarker.setRenderEvent((LocationNode node) -> {
 									View eView = layoutsRenderable.get(0).getView();
 									TextView distanceTextView = eView.findViewById(R.id.textView);
-									distanceTextView.setText(node.getDistance() + " m");
+									distanceTextView.setText(node.getDistance() + " m\n" + destinationName);
 
 									System.out.println("Prowadzę do: " + destinationName);
 								});
@@ -177,6 +177,8 @@ public class ARActivity extends AppCompatActivity {
                                     && frameTime.getStartSeconds() > lastFrame + 10){
 							    System.out.println("TRYB: EKSPLORACJA");
 
+							    lastFrame = frameTime.getStartSeconds();
+
 							    hideSnackbar();
 
 								locationScene.mLocationMarkers = new ArrayList<>();
@@ -187,9 +189,12 @@ public class ARActivity extends AppCompatActivity {
                                 buildingDisplayIdsToDisplay = new ArrayList<>();
 							    buildingsNearby.values().stream()
                                         .forEach(b -> buildingDisplayIdsToDisplay.add(b.getBuildingDisplayId()));
+								System.out.println("PRZEDFOR");
 
                                 for (Long buildingDisplayId : buildingDisplayIdsToDisplay) {
-                                    BuildingDisplay buildingDisplay = allBuildingsDisplays.get(buildingDisplayId);
+									System.out.println("FOR123");
+
+									BuildingDisplay buildingDisplay = allBuildingsDisplays.get(buildingDisplayId);
                                     LocationMarker layoutLocationMarker = new LocationMarker(
                                             buildingDisplay.getCenter().getLongitude(),
                                             buildingDisplay.getCenter().getLatitude(),
@@ -409,7 +414,7 @@ public class ARActivity extends AppCompatActivity {
                             .sorted(Map.Entry.comparingByValue(Comparator.naturalOrder()))
                             .mapToLong(Map.Entry::getKey)
                             .boxed()
-                            .limit(3)
+                            .limit(DISPLAYED_BUILDINGS)
                             .collect(Collectors.toList());
 
             getBuildingData(buildingDisplaysNearbyIds);
